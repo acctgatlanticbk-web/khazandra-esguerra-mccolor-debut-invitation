@@ -3,58 +3,129 @@
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import localFont from "next/font/local"
 import { X, ChevronLeft, ChevronRight, Camera } from "lucide-react"
 import { Cinzel } from "next/font/google"
 import { Section } from "@/components/section"
 import { useSiteConfig } from "@/hooks/use-site-config"
-import {
-  coastalLightBg,
-  coastalPalette,
-  coastalTitleShadow,
-  displayScript,
-} from "@/lib/coastal-palette"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
+})
+
+const theSeasons = localFont({
+  src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  display: "swap",
+  variable: "--font-the-seasons",
+})
+
+const aboveTheBeyond = localFont({
+  src: "../../Font/above-the-beyond-script.otf",
+  display: "swap",
+  variable: "--font-above-beyond",
 })
 
 const CORNER_DECO_CLASS =
-  "block h-auto w-auto max-w-[120px] sm:max-w-[160px] md:max-w-[220px] lg:max-w-[260px]"
+  "block h-auto w-auto max-w-[120px] sm:max-w-[180px] md:max-w-[260px] lg:max-w-[320px] xl:max-w-[380px]"
 
-const BLUE_SHELL_FILTER =
-  `brightness(0) saturate(100%) invert(58%) sepia(18%) saturate(612%) hue-rotate(152deg) brightness(95%) contrast(88%) drop-shadow(0 4px 14px color-mix(in srgb, ${coastalPalette.blueGray} 55%, transparent))`
+function GalleryCoupleLabel({ groom, bride }: { groom: string; bride: string }) {
+  const lineStyle = {
+    background:
+      "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-welcome-navy) 35%, transparent))",
+  }
 
-const bodyFont: React.CSSProperties = {
-  fontFamily: "'SortsMillGoudy', Georgia, 'Times New Roman', serif",
+  return (
+    <div className="flex items-center justify-center gap-2.5 sm:gap-3.5">
+      <span className="h-px w-5 sm:w-7 md:w-9" style={lineStyle} aria-hidden />
+      <p
+        className={`${cinzel.className} shrink-0 py-0.5 text-[0.525rem] font-semibold uppercase leading-normal tracking-[0.34em] min-[400px]:text-[0.55rem] min-[400px]:tracking-[0.38em] sm:text-[0.575rem] sm:tracking-[0.44em]`}
+        style={{ color: "var(--color-welcome-navy)" }}
+      >
+        With {groom}
+        <span
+          className={`${aboveTheBeyond.className} mx-1.5 inline-block normal-case tracking-normal sm:mx-2`}
+          style={{
+            fontSize: "1.35em",
+            color: "var(--color-welcome-green)",
+            verticalAlign: "middle",
+          }}
+          aria-hidden
+        >
+          &
+        </span>
+        {bride}
+      </p>
+      <span
+        className="h-px w-5 sm:w-7 md:w-9"
+        style={{
+          background:
+            "linear-gradient(to left, transparent, color-mix(in srgb, var(--color-welcome-navy) 35%, transparent))",
+        }}
+        aria-hidden
+      />
+    </div>
+  )
 }
 
-const ct = {
-  label: "text-[11px] sm:text-xs md:text-sm",
-  body: "text-xs sm:text-sm md:text-base",
-  bodyLg: "text-sm sm:text-base md:text-lg",
-  btn: "text-xs sm:text-sm",
-} as const
+function GalleryTitle() {
+  return (
+    <h2
+      className="relative mx-auto w-full max-w-full text-center"
+      style={
+        {
+          "--title-size": "clamp(2.15rem, 11vw, 4.5rem)",
+          "--script-size": "clamp(1.1rem, 4.5vw, 2.25rem)",
+          "--script-overlap": "clamp(-0.65rem, -2.8vw, -1.5rem)",
+        } as React.CSSProperties
+      }
+    >
+      <span
+        className={`${theSeasons.className} block uppercase leading-[0.78] tracking-[0.08em] min-[400px]:tracking-[0.11em] sm:tracking-[0.15em] md:tracking-[0.18em]`}
+        style={{
+          fontSize: "var(--title-size)",
+          color: "var(--color-welcome-navy)",
+        }}
+      >
+        Gallery
+      </span>
+      <span
+        aria-hidden
+        className={`${aboveTheBeyond.className} relative z-10 mx-auto block w-fit max-w-full px-1 leading-[0.88] sm:leading-[0.9]`}
+        style={{
+          marginTop: "var(--script-overlap)",
+          fontSize: "var(--script-size)",
+          color: "var(--color-welcome-green)",
+          textShadow:
+            "0 1px 0 color-mix(in srgb, var(--color-welcome-bg) 95%, white), 0 0 10px color-mix(in srgb, var(--color-welcome-bg) 65%, white)",
+        }}
+      >
+        our favorite moments
+      </span>
+      <span className="sr-only">our favorite moments</span>
+    </h2>
+  )
+}
 
 const galleryItems = [
-  { image: "/mobile-background/couple (1).jpeg", text: " " },
-  { image: "/mobile-background/couple (2).jpeg", text: " " },
-  { image: "/mobile-background/couple (3).jpeg", text: " " },
-  { image: "/mobile-background/couple (4).jpeg", text: " " },
-  { image: "/mobile-background/couple (5).jpeg", text: " " },
-  { image: "/mobile-background/couple (6).jpeg", text: " " },
-  { image: "/mobile-background/couple (7).jpeg", text: " " },
-  { image: "/mobile-background/couple (8).jpeg", text: " " },
-  { image: "/mobile-background/couple (9).jpeg", text: " " },
-  { image: "/mobile-background/couple (10).jpeg", text: " " },
+  { image: "/mobile-background/couple (1).webp", text: " " },
+  { image: "/mobile-background/couple (2).webp", text: " " },
+  { image: "/mobile-background/couple (3).webp", text: " " },
+  { image: "/mobile-background/couple (4).webp", text: " " },
+  { image: "/mobile-background/couple (5).webp", text: " " },
+  { image: "/mobile-background/couple (6).webp", text: " " },
+  { image: "/mobile-background/couple (7).webp", text: " " },
+  { image: "/mobile-background/couple (8).webp", text: " " },
+  { image: "/mobile-background/couple (9).webp", text: " " },
+  { image: "/mobile-background/couple (10).webp", text: " " },
 
 
 ]
 
 export function Gallery() {
   const siteConfig = useSiteConfig()
-  const { brideNickname, groomNickname } = siteConfig.couple
-  const coupleDisplayName = `${groomNickname} & ${brideNickname}`
+  const brideName = siteConfig.couple.brideNickname || siteConfig.couple.bride
+  const groomName = siteConfig.couple.groomNickname || siteConfig.couple.groom
 
   const [selectedImage, setSelectedImage] = useState<(typeof galleryItems)[0] | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -131,69 +202,80 @@ export function Gallery() {
 
   return (
     <div
-      className="relative w-full"
-      style={{ backgroundColor: coastalLightBg }}
+      className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative w-full`}
+      style={{ background: "var(--color-welcome-bg)" }}
     >
       <Section
         id="gallery"
         className="relative z-10 pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14"
       >
-      {/* Shell corner decorations */}
-      <div className="pointer-events-none absolute left-0 top-0 z-[1]">
+      {/* Corner decorations */}
+      <div className="pointer-events-none absolute left-0 top-0 z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/decoration/top-left-shell-deco.png"
+          src="/decoration/decoration/left-top-decoration.png"
           alt=""
           className={CORNER_DECO_CLASS}
-          style={{ filter: BLUE_SHELL_FILTER }}
         />
       </div>
-      <div className="pointer-events-none absolute bottom-0 right-0 z-[1]">
+      <div className="pointer-events-none absolute right-0 top-0 z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/decoration/right-bottom-shell-deco.png"
+          src="/decoration/decoration/right-top-decoration.png"
           alt=""
           className={CORNER_DECO_CLASS}
-          style={{ filter: BLUE_SHELL_FILTER }}
+        />
+      </div>
+      <div className="pointer-events-none absolute bottom-0 left-0 z-10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/decoration/decoration/left-bottom-decoration%20(2).png"
+          alt=""
+          className={CORNER_DECO_CLASS}
+        />
+      </div>
+      <div className="pointer-events-none absolute bottom-0 right-0 z-10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/decoration/decoration/right-bottom-decoration%20(2).png"
+          alt=""
+          className={CORNER_DECO_CLASS}
         />
       </div>
 
       {/* Header */}
-      <div className="relative z-20 text-center mb-6 sm:mb-8 md:mb-10 px-6 sm:px-10 md:px-12">
+      <div className="relative z-20 mb-6 px-6 text-center sm:mb-8 sm:px-10 md:mb-10 md:px-12">
+        <GalleryCoupleLabel groom={groomName} bride={brideName} />
+        <div className="my-4 sm:my-5 md:my-6">
+          <GalleryTitle />
+        </div>
         <p
-          className={`${cinzel.className} ${ct.label} uppercase tracking-[0.2em] sm:tracking-[0.24em] mb-2`}
-          style={{ color: coastalPalette.dustyRose }}
+          className="font-goudy-italic mx-auto max-w-2xl px-2 text-[0.75rem] leading-[1.62] sm:text-[0.8125rem] sm:leading-[1.65] md:text-[0.84375rem]"
+          style={{ color: "var(--color-welcome-text)" }}
         >
-          With {coupleDisplayName}
-        </p>
-        <h2
-          className="mx-auto my-4 max-w-[14ch] leading-[1.08] sm:my-5 md:my-6 md:max-w-none"
-          style={{
-            ...displayScript,
-            fontSize: "clamp(2.35rem, 7.5vw, 4.25rem)",
-            color: coastalPalette.title,
-            letterSpacing: "0.02em",
-            textShadow: coastalTitleShadow,
-          }}
-        >
-          Gallery
-        </h2>
-        <p
-          className={`${ct.bodyLg} max-w-2xl mx-auto leading-relaxed px-2`}
-          style={{ ...bodyFont, color: coastalPalette.body }}
-        >
-          From our first chapter to this beautiful season of commitment — every moment has been a testament to love, faith, and grace.
+          From our first chapter to this beautiful season of commitment — every moment has been a
+          testament to love, faith, and grace.
         </p>
 
-        <div className="flex items-center justify-center gap-2 pt-2 sm:pt-3">
+        <div className="flex items-center justify-center gap-2 pt-3 sm:pt-4">
           <span
-            className="h-px w-10 sm:w-16 md:w-20"
-            style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.blueGray} 70%, white)` }}
+            className="h-px w-8 sm:w-12 md:w-16"
+            style={{
+              background:
+                "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-welcome-navy) 38%, transparent))",
+            }}
           />
-          <Camera className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color: coastalPalette.teal }} />
+          <Camera
+            className="h-3.5 w-3.5 sm:h-4 sm:w-4"
+            style={{ color: "var(--color-welcome-green)" }}
+            aria-hidden
+          />
           <span
-            className="h-px w-10 sm:w-16 md:w-20"
-            style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.blueGray} 70%, white)` }}
+            className="h-px w-8 sm:w-12 md:w-16"
+            style={{
+              background:
+                "linear-gradient(to left, transparent, color-mix(in srgb, var(--color-welcome-navy) 38%, transparent))",
+            }}
           />
         </div>
       </div>
@@ -202,7 +284,13 @@ export function Gallery() {
       <div className="relative z-20 w-full max-w-6xl mx-auto px-6 sm:px-10 md:px-12 pb-2 sm:pb-3">
         {isLoading ? (
           <div className="flex items-center justify-center h-64 sm:h-80 md:h-96">
-            <div className="w-12 h-12 border-[3px] rounded-full animate-spin" style={{ borderColor: `color-mix(in srgb, ${coastalPalette.teal} 30%, transparent)`, borderTopColor: coastalPalette.teal }} />
+            <div
+              className="h-12 w-12 animate-spin rounded-full border-[3px]"
+              style={{
+                borderColor: "color-mix(in srgb, var(--color-welcome-green) 30%, transparent)",
+                borderTopColor: "var(--color-welcome-green)",
+              }}
+            />
           </div>
         ) : (
           <>
@@ -223,7 +311,13 @@ export function Gallery() {
                     }}
                     aria-label={`Open image ${index + 1}`}
                   >
-                    <div className="absolute -inset-0.5 rounded-lg opacity-0 group-active:opacity-100 transition-opacity duration-300 blur-sm" style={{ background: `color-mix(in srgb, ${coastalPalette.teal} 25%, transparent)` }} />
+                    <div
+                      className="absolute -inset-0.5 rounded-lg opacity-0 blur-sm transition-opacity duration-300 group-active:opacity-100"
+                      style={{
+                        background:
+                          "color-mix(in srgb, var(--color-welcome-green) 25%, transparent)",
+                      }}
+                    />
 
                     <div className="relative aspect-[3/4] overflow-hidden rounded-lg">
                       <Image
@@ -236,8 +330,17 @@ export function Gallery() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-active:opacity-100 transition-opacity duration-300" />
                     </div>
 
-                    <div className="absolute top-2 right-2 backdrop-blur-sm rounded-full px-2 py-1" style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.deep} 65%, transparent)` }}>
-                      <span className="text-xs font-medium" style={{ color: coastalPalette.cream }}>
+                    <div
+                      className="absolute top-2 right-2 rounded-full px-2 py-1 backdrop-blur-sm"
+                      style={{
+                        backgroundColor:
+                          "color-mix(in srgb, var(--color-welcome-navy) 65%, transparent)",
+                      }}
+                    >
+                      <span
+                        className="text-xs font-medium"
+                        style={{ color: "var(--color-welcome-bg)" }}
+                      >
                         {index + 1}/{galleryItems.length}
                       </span>
                     </div>
@@ -245,7 +348,10 @@ export function Gallery() {
                 ))}
               </div>
 
-              <p className={`${ct.label} mt-2 text-center tracking-wide`} style={{ ...bodyFont, color: coastalPalette.teal }}>
+              <p
+                className="font-goudy-italic mt-2 text-center text-[0.625rem] tracking-wide sm:text-[0.6875rem]"
+                style={{ color: "var(--color-welcome-heading)" }}
+              >
                 Swipe to explore
               </p>
             </div>
@@ -263,7 +369,13 @@ export function Gallery() {
                   }}
                   aria-label={`Open image ${index + 1}`}
                 >
-                  <div className="absolute -inset-0.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm" style={{ background: `color-mix(in srgb, ${coastalPalette.teal} 22%, transparent)` }} />
+                  <div
+                    className="absolute -inset-0.5 rounded-xl opacity-0 blur-sm transition-opacity duration-300 group-hover:opacity-100"
+                    style={{
+                      background:
+                        "color-mix(in srgb, var(--color-welcome-green) 22%, transparent)",
+                    }}
+                  />
 
                   <div className="relative aspect-[3/4] md:aspect-square overflow-hidden rounded-xl">
                     <Image
@@ -276,8 +388,17 @@ export function Gallery() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
 
-                  <div className="absolute top-2 right-2 backdrop-blur-sm rounded-full px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.deep} 65%, transparent)` }}>
-                    <span className="text-xs font-medium" style={{ color: coastalPalette.cream }}>
+                  <div
+                    className="absolute top-2 right-2 rounded-full px-2 py-1 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100"
+                    style={{
+                      backgroundColor:
+                        "color-mix(in srgb, var(--color-welcome-navy) 65%, transparent)",
+                    }}
+                  >
+                    <span
+                      className="text-xs font-medium"
+                      style={{ color: "var(--color-welcome-bg)" }}
+                    >
                       {index + 1}/{galleryItems.length}
                     </span>
                   </div>
@@ -288,18 +409,22 @@ export function Gallery() {
             <div className="mt-10 sm:mt-12 md:mt-14 flex justify-center">
               <Link
                 href="/gallery"
-                className={`${cinzel.className} inline-flex items-center justify-center rounded-full px-8 py-3 ${ct.btn} uppercase tracking-[0.18em] font-semibold transition-all duration-300 hover:scale-[1.02] border`}
+                className={`${cinzel.className} inline-flex items-center justify-center rounded-full border px-8 py-3 text-[0.625rem] font-semibold uppercase tracking-[0.18em] transition-all duration-300 hover:scale-[1.02] sm:text-[0.6875rem] sm:tracking-[0.22em]`}
                 style={{
-                  backgroundColor: "#FBCFC6",
-                  borderColor: coastalPalette.dustyRose,
-                  color: coastalPalette.deep,
-                  boxShadow: `0 6px 20px color-mix(in srgb, #FBCFC6 45%, transparent)`,
+                  backgroundColor: "var(--color-welcome-green)",
+                  borderColor: "color-mix(in srgb, var(--color-welcome-navy) 35%, transparent)",
+                  color: "var(--color-welcome-bg)",
+                  boxShadow:
+                    "0 6px 20px color-mix(in srgb, var(--color-welcome-green) 35%, transparent)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = coastalPalette.peach
+                  e.currentTarget.style.backgroundColor = "var(--color-welcome-navy)"
+                  e.currentTarget.style.borderColor = "var(--color-welcome-green)"
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#FBCFC6"
+                  e.currentTarget.style.backgroundColor = "var(--color-welcome-green)"
+                  e.currentTarget.style.borderColor =
+                    "color-mix(in srgb, var(--color-welcome-navy) 35%, transparent)"
                 }}
               >
                 View Full Gallery
@@ -374,8 +499,18 @@ export function Gallery() {
             {/* Top bar with counter and close */}
             <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between p-4 sm:p-6">
               {/* Image counter */}
-              <div className="backdrop-blur-md rounded-full px-4 py-2 border" style={{ backgroundColor: "rgba(0,0,0,0.4)", borderColor: `color-mix(in srgb, ${coastalPalette.teal} 50%, transparent)` }}>
-                <span className="text-sm sm:text-base font-medium" style={{ color: coastalPalette.cream }}>
+              <div
+                className="rounded-full border px-4 py-2 backdrop-blur-md"
+                style={{
+                  backgroundColor: "rgba(0,0,0,0.4)",
+                  borderColor:
+                    "color-mix(in srgb, var(--color-welcome-green) 50%, transparent)",
+                }}
+              >
+                <span
+                  className="text-sm font-medium sm:text-base"
+                  style={{ color: "var(--color-welcome-bg)" }}
+                >
                   {currentIndex + 1} / {galleryItems.length}
                 </span>
               </div>

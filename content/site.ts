@@ -5,12 +5,12 @@ import {
 
 export const siteConfig = {
   couple: {
-    bride: "Denise Allison Cada", //Noenyl Bryle M. Gonzaga
-    brideNickname: "Denise", //Ltryl
-    groom: "Mark Biong", //Ltryl B. Benitez
-    groomNickname: "Mark",
-    monogram:"/monogram/monogram-new.png" ,//Ltryl
-    backgroundMusic:"/background_music/Panalangin (WITH TAB) Moonstar88  Fingerstyle Guitar Cover  Lyrics.mp3"
+    bride: "Gayle Kathleen Asoy Gable", //Noenyl Bryle M. Gonzaga
+    brideNickname: "Kath", //Ltryl
+    groom: "Jopert Rey Cabote De La Cruz", //Ltryl B. Benitez
+    groomNickname: "Jopert",
+    monogram:"/monogram/mono-colored.png" ,//Ltryl
+    backgroundMusic:"/background_music/Taylor Swift - Labyrinth (Official HD Audio) (mp3cut.net).mp3"
   },
   googleAPI:{
     messageForm: "https://docs.google.com/forms/d/e/1FAIpQLSe-BGG96Vmw0EW7pffjhWUnXPLCE2cPT7QZLy4p9x9NK890Bw/formResponse",   //done
@@ -25,7 +25,7 @@ export const siteConfig = {
     googleShare: "https://docs.google.com/spreadsheets/d/1LzwyRloGBdhylHiOTwjakkbWqLp8jFmmVLfdTJA8OJs/edit?usp=sharing", 
   },
   wedding: {
-    date: "August 26, 2026",
+    date: "October 18, 2026",
     time: "3:00 PM",
     venue: "St. Anthony of Padua Parish",
     tagline: "are getting married!",
@@ -41,8 +41,8 @@ export const siteConfig = {
   details: {
     rsvp: {
       deadline: "August 1, 2026",
-      coordinator: "Trixie Castillo",
-      phone: "0965 490 6240",
+      coordinator: "Gayle Kathleen Asoy Gable",
+      phone: "+63 965 490 6240",
     },
   },
   contact: {
@@ -53,36 +53,36 @@ export const siteConfig = {
   giftRegistry: {
     QR_1:{
     id: "BPI",
-    src: "/monogram/BPI.png",
+    src: "/QR/pleaseProvideQR.png",
     label: "BPI",
-    accountNumber: "TE*I NI***E A GU******O",
+    accountNumber: "Please Provide QR",
     },
     QR_2:{
     id: "Zelle",
-    src: "/monogram/Zelle.png",
+    src: "/QR/pleaseProvideQR.png",
     label: "Zelle",
-    accountNumber: "Patrick: xxx-xxx-0009",
+    accountNumber: "Please Provide QR",
     }
   },
   ceremony: {
-    location: "St. Anthony of Padua Parish",
-    venue: "Sulangan, Guiuan, Eastern Samar",
-    map: "https://maps.app.goo.gl/tcGfBAeEvJQ6pPzF7",
-    date: "August 26, 2026",
-    day: "Wednesday",
+    location: "Farm Hills Garden",
+    venue: "Brgy. Ulat, Silang, 4118 Cavite, Philippines",
+    map: "https://maps.app.goo.gl/XsvkMe2e4G47JfEA9",
+    date: "October 18, 2026",
+    day: "Sunday",
     time: "3:00 PM",
     entourageTime: "2:00 PM",
     guestsTime: "2:30 PM",
-    image: ["/Details/ceremony.png", "/Details/ceremony.png"],
+    image: ["/Details/reception.png", "/Details/reception2.png", "/Details/reception3.png"],
   },
   reception: {
     location: "Baybayon Ni Tata Joven",
     venue: "Brgy. Ngolos, Guiuan, Eastern Samar ",
     map: "https://maps.app.goo.gl/LBsKoJMUGNVwKSqK8",
-    date: "October 4, 2026",
+    date: "October 18, 2026",
     day: "Wednesday",
     time: "6:00 PM",
-    image: ["/Details/reception.png", "/Details/reception.png"],
+    image: ["/Details/reception.png", "/Details/reception2.png", "/Details/reception3.png"],
   },
   dressCode: {
       theme: "SEMI-FORMAL",
@@ -134,22 +134,22 @@ Now, as they prepare to say yes before God and the people they love most, Cather
   playlist: {
     title: "A Playlist from our hearts",
     subtitle: "Songs that have been part of our journey together",
-    playlistName: "Mark & Denise Wedding",
+    playlistName: "Kath & Jopert Wedding",
     embedUrl:
-    //"https://open.spotify.com/embed/playlist/5Byw7lVriAOsOFOQ7A3hE6?utm_source=generator&si=2252feb4ea514014
-      "https://open.spotify.com/embed/playlist/5Byw7lVriAOsOFOQ7A3hE6?utm_source=generator&si=2252feb4ea514014",
-    spotifyUrl: "https://open.spotify.com/playlist/5Byw7lVriAOsOFOQ7A3hE6",
+    //"https://open.spotify.com/embed/playlist/4fr1yyG0dA8rAnhYTQxECe?utm_source=generator&si=32898d38071f43ba
+      "https://open.spotify.com/embed/playlist/4fr1yyG0dA8rAnhYTQxECe?utm_source=generator&si=32898d38071f43ba",
+    spotifyUrl: "https://open.spotify.com/playlist/4fr1yyG0dA8rAnhYTQxECe",
   },
   snapShare: {
     googleDriveLink:
-      "https://drive.google.com/drive/folders/1fH_NKSGFyW1DupwtElpS-cZIldXJ3280?usp=sharing",
+      "https://drive.google.com/drive/folders/1GPp6UBBGJ4eY4G9jE9Esfo2209PuEgWk?usp=sharing",
     albumQR: "/QR/AlbumQR.png",
-    hashtag: ["#BIONGgaCADAy"],
+    hashtag: ["#JOPERTfoundhisKATHadhana",  ],
     instructions: "Please scan this QR Code and upload the photos and videos you have taken during our wedding reception. We are delighted to see your snaps too!",
   },
   accommodation: {
     coordinator: {
-      name: "Teri DelaCruz",
+      name: "Gayle Kathleen Asoy Gable",
       phone: "0909 912 3844",
     },
     hotels: [

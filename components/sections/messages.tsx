@@ -1,7 +1,6 @@
 "use client"
 
 import { useRef, useState, useCallback, useEffect } from "react"
-import { Section } from "@/components/section"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -9,43 +8,57 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import MessageWallDisplay from "./message-wall-display"
 import { Cinzel } from "next/font/google"
+import localFont from "next/font/local"
 import { useSiteConfig } from "@/hooks/use-site-config"
-import { coastalPalette, displayScript } from "@/lib/coastal-palette"
-
-const OUTSIDE_TEXT = coastalPalette.cream
-const OUTSIDE_TEXT_MUTED = "rgba(255, 252, 248, 0.88)"
-const OUTSIDE_LABEL = "rgba(255, 252, 248, 0.72)"
-const OUTSIDE_TITLE_SHADOW =
-  "0 2px 6px rgba(0, 0, 0, 0.28), 0 0 18px rgba(0, 0, 0, 0.12)"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
 })
 
-const BUTTON_COLOR = "#FBCFC6"
+const theSeasons = localFont({
+  src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  display: "swap",
+  variable: "--font-the-seasons",
+})
 
-const bodyFont: React.CSSProperties = {
-  fontFamily: "'SortsMillGoudy', Georgia, 'Times New Roman', serif",
-}
+const aboveTheBeyond = localFont({
+  src: "../../Font/above-the-beyond-script.otf",
+  display: "swap",
+  variable: "--font-above-beyond",
+})
+
+const OUTSIDE_TEXT = "#FFFFFF"
+const OUTSIDE_TEXT_MUTED = "rgba(255, 255, 255, 0.88)"
+const OUTSIDE_TITLE_SHADOW =
+  "0 2px 6px rgba(0, 0, 0, 0.28), 0 0 18px rgba(0, 0, 0, 0.12)"
+
+const palette = {
+  body: "var(--color-welcome-text)",
+  heading: "var(--color-welcome-navy)",
+  label: "var(--color-welcome-heading)",
+  accent: "var(--color-welcome-green)",
+} as const
+
+const outsideDividerLineStyle = {
+  background:
+    "linear-gradient(to right, transparent, rgba(255, 255, 255, 0.55), transparent)",
+} as const
 
 const ct = {
-  label: "text-[11px] sm:text-xs md:text-sm",
   body: "text-xs sm:text-sm md:text-base",
   bodyLg: "text-sm sm:text-base md:text-lg",
   formTitle: "text-sm sm:text-base md:text-lg",
-  btn: "text-xs sm:text-sm",
+  btn: "text-[0.625rem] sm:text-[0.6875rem] md:text-xs",
 } as const
 
 const cardStyle = {
-  background: `linear-gradient(
-    155deg,
-    color-mix(in srgb, ${coastalPalette.peach} 88%, white) 0%,
-    color-mix(in srgb, ${coastalPalette.lavenderBlue} 92%, white) 50%,
-    color-mix(in srgb, ${coastalPalette.blueGray} 55%, white) 100%
-  )`,
-  borderColor: `color-mix(in srgb, ${coastalPalette.dustyRose} 38%, white)`,
-  boxShadow: `0 16px 48px color-mix(in srgb, ${coastalPalette.teal} 14%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.72)`,
+  background: "var(--color-welcome-bg)",
+  borderWidth: "1px",
+  borderStyle: "solid",
+  borderColor: "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+  boxShadow:
+    "0 8px 28px color-mix(in srgb, var(--color-motif-deep) 7%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)",
 } as const
 
 interface Message {
@@ -57,6 +70,61 @@ interface Message {
 interface MessageFormProps {
   onSuccess?: () => void
   onMessageSent?: () => void
+}
+
+function OutsideDivider() {
+  return (
+    <div className="flex items-center justify-center gap-1.5">
+      <span className="h-px w-6 sm:w-10" style={outsideDividerLineStyle} />
+      <span className="h-0.5 w-0.5 rounded-full bg-white/50 sm:h-1 sm:w-1" aria-hidden />
+      <span
+        className="h-px w-6 sm:w-10"
+        style={{
+          background:
+            "linear-gradient(to left, transparent, rgba(255, 255, 255, 0.55), transparent)",
+        }}
+      />
+    </div>
+  )
+}
+
+function MessagesTitle() {
+  return (
+    <h2
+      className="relative mx-auto w-full max-w-full text-center"
+      style={
+        {
+          "--title-size": "clamp(2.15rem, 11vw, 4.5rem)",
+          "--script-size": "clamp(1.1rem, 4.5vw, 2.25rem)",
+          "--script-overlap": "clamp(-0.65rem, -2.8vw, -1.5rem)",
+        } as React.CSSProperties
+      }
+    >
+      <span
+        className={`${theSeasons.className} block uppercase leading-[0.78] tracking-[0.08em] min-[400px]:tracking-[0.11em] sm:tracking-[0.15em] md:tracking-[0.18em]`}
+        style={{
+          fontSize: "var(--title-size)",
+          color: OUTSIDE_TEXT,
+          textShadow: OUTSIDE_TITLE_SHADOW,
+        }}
+      >
+        Love Notes and Prayers
+      </span>
+      <span
+        aria-hidden
+        className={`${aboveTheBeyond.className} relative z-10 mx-auto block w-fit max-w-full px-1 leading-[0.88] sm:leading-[0.9]`}
+        style={{
+          marginTop: "var(--script-overlap)",
+          fontSize: "var(--script-size)",
+          color: OUTSIDE_TEXT_MUTED,
+          textShadow: OUTSIDE_TITLE_SHADOW,
+        }}
+      >
+        Share your love with us
+      </span>
+      <span className="sr-only">Share your love with us</span>
+    </h2>
+  )
 }
 
 function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
@@ -121,16 +189,16 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
 
   const inputBorder = (field: string) =>
     focusedField === field
-      ? coastalPalette.teal
-      : `color-mix(in srgb, ${coastalPalette.blueGray} 55%, white)`
+      ? palette.accent
+      : "color-mix(in srgb, var(--color-motif-deep) 22%, transparent)"
 
   const inputClass = (field: string) =>
-    `message-form-input w-full border-2 rounded-xl py-2 sm:py-2.5 md:py-3 px-3 sm:px-4 ${ct.body} placeholder:italic transition-all duration-300 bg-white shadow-sm hover:shadow-md focus:shadow-lg ${
+    `message-form-input w-full rounded-xl border-2 px-3 py-2 ${ct.body} shadow-sm transition-all duration-300 placeholder:italic hover:shadow-md focus:shadow-lg sm:px-4 sm:py-2.5 md:py-3 ${
       focusedField === field ? "shadow-lg" : ""
     }`
 
   return (
-    <div className="relative w-full max-w-md mx-auto px-3 sm:px-0">
+    <div className="relative mx-auto w-full max-w-md px-3 sm:px-0">
       <style>{`
         .message-form-input::placeholder,
         .message-form-textarea::placeholder {
@@ -140,19 +208,24 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
       `}</style>
 
       <Card
-        className={`relative w-full border backdrop-blur-md transition-all duration-500 overflow-hidden rounded-2xl ${
+        className={`relative w-full overflow-hidden rounded-xl border backdrop-blur-xl transition-all duration-500 sm:rounded-2xl sm:backdrop-blur-2xl ${
           isFocused ? "scale-[1.01]" : ""
         } ${isSubmitted ? "animate-bounce" : ""}`}
         style={cardStyle}
       >
+        <div
+          className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-white/35 via-white/8 to-transparent"
+          aria-hidden
+        />
+
         {isSubmitted && (
           <div
-            className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
-            style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.lavenderBlue} 92%, white)` }}
+            className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+            style={{ backgroundColor: "var(--color-welcome-bg-soft)" }}
           >
             <p
               className={`${cinzel.className} font-semibold ${ct.formTitle}`}
-              style={{ color: coastalPalette.title }}
+              style={{ color: palette.heading }}
             >
               Sent!
             </p>
@@ -160,14 +233,14 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
         )}
 
         <CardContent className="relative p-4 sm:p-5 md:p-6 lg:p-8">
-          <div className="text-center mb-4 sm:mb-5 md:mb-6">
+          <div className="mb-4 text-center sm:mb-5 md:mb-6">
             <h3
-              className={`${cinzel.className} ${ct.formTitle} font-semibold mb-1.5`}
-              style={{ color: coastalPalette.deep }}
+              className={`${cinzel.className} ${ct.formTitle} mb-1.5 font-semibold`}
+              style={{ color: palette.heading }}
             >
               Share Your Love
             </h3>
-            <p className={ct.body} style={{ ...bodyFont, color: coastalPalette.body }}>
+            <p className={`font-goudy-italic ${ct.body}`} style={{ color: palette.body }}>
               Leave a note for {coupleDisplayName} to read and keep.
             </p>
           </div>
@@ -182,7 +255,7 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
             <div className="space-y-1.5 sm:space-y-2">
               <label
                 className={`${cinzel.className} ${ct.body} font-medium`}
-                style={{ color: coastalPalette.dustyRose }}
+                style={{ color: palette.label }}
               >
                 Your Name
               </label>
@@ -196,8 +269,8 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
                 placeholder="Full name"
                 className={inputClass("name")}
                 style={{
-                  color: coastalPalette.body,
-                  fontFamily: bodyFont.fontFamily,
+                  color: palette.body,
+                  backgroundColor: "white",
                   borderColor: inputBorder("name"),
                 }}
               />
@@ -207,14 +280,14 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
               <div className="flex items-center justify-between gap-2">
                 <label
                   className={`${cinzel.className} ${ct.body} font-medium`}
-                  style={{ color: coastalPalette.dustyRose }}
+                  style={{ color: palette.label }}
                 >
                   Your Message
                 </label>
                 {messageValue && (
                   <span
-                    className={`${ct.label} ${messageValue.length > 500 ? "text-red-500" : ""}`}
-                    style={messageValue.length <= 500 ? { color: coastalPalette.teal } : undefined}
+                    className={`text-[10px] sm:text-[11px] md:text-xs ${messageValue.length > 500 ? "text-red-500" : ""}`}
+                    style={messageValue.length <= 500 ? { color: palette.accent } : undefined}
                   >
                     {messageValue.length}/500
                   </span>
@@ -232,10 +305,10 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
                 onFocus={() => setFocusedField("message")}
                 onBlur={() => setFocusedField(null)}
                 placeholder={`Write your wishes, prayer, or kind words for ${coupleDisplayName}...`}
-                className={`message-form-textarea ${inputClass("message")} min-h-[90px] sm:min-h-[110px] md:min-h-[130px] resize-none placeholder:leading-relaxed`}
+                className={`message-form-textarea ${inputClass("message")} min-h-[90px] resize-none placeholder:leading-relaxed sm:min-h-[110px] md:min-h-[130px]`}
                 style={{
-                  color: coastalPalette.body,
-                  fontFamily: bodyFont.fontFamily,
+                  color: palette.body,
+                  backgroundColor: "white",
                   borderColor: inputBorder("message"),
                 }}
               />
@@ -244,25 +317,27 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
             <Button
               type="submit"
               disabled={isSubmitting || !nameValue.trim() || !messageValue.trim()}
-              className={`${cinzel.className} w-full py-2.5 sm:py-3 px-5 rounded-full ${ct.btn} uppercase tracking-[0.18em] font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none border`}
+              className={`${cinzel.className} group relative w-full rounded-sm border px-5 py-2.5 font-semibold uppercase tracking-[0.2em] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70 disabled:transform-none sm:py-3 sm:tracking-[0.24em] md:tracking-[0.28em] ${ct.btn}`}
               style={{
-                backgroundColor: BUTTON_COLOR,
-                borderColor: coastalPalette.dustyRose,
-                color: coastalPalette.deep,
-                boxShadow: `0 6px 20px color-mix(in srgb, ${BUTTON_COLOR} 45%, transparent)`,
+                backgroundColor: "var(--color-welcome-green)",
+                borderColor: "color-mix(in srgb, var(--color-welcome-navy) 35%, transparent)",
+                color: "var(--color-welcome-bg)",
               }}
               onMouseEnter={(e) => {
                 if (!e.currentTarget.disabled) {
-                  e.currentTarget.style.backgroundColor = coastalPalette.peach
+                  e.currentTarget.style.backgroundColor = "var(--color-welcome-navy)"
+                  e.currentTarget.style.borderColor = "var(--color-welcome-green)"
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = BUTTON_COLOR
+                e.currentTarget.style.backgroundColor = "var(--color-welcome-green)"
+                e.currentTarget.style.borderColor =
+                  "color-mix(in srgb, var(--color-welcome-navy) 35%, transparent)"
               }}
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24">
+                  <svg className="h-4 w-4 animate-spin sm:h-5 sm:w-5" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
@@ -315,63 +390,50 @@ export function Messages() {
   }, [fetchMessages])
 
   return (
-    <Section
+    <section
       id="messages"
-      className="relative bg-transparent pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14"
+      className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative z-10 bg-transparent pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14`}
     >
-      <div className="relative z-10 max-w-6xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-6xl px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Header — outside container */}
-        <div className="text-center mb-6 sm:mb-8 md:mb-10">
+        <div className="mb-6 text-center sm:mb-8 md:mb-10">
+          <div className="mx-auto mb-5 sm:mb-6 md:mb-7">
+            <OutsideDivider />
+          </div>
+          <div className="mx-auto mt-2 sm:mt-3 md:mt-4">
+            <MessagesTitle />
+          </div>
           <p
-            className={`${cinzel.className} ${ct.label} uppercase tracking-[0.2em] sm:tracking-[0.24em] mb-2`}
-            style={{ color: OUTSIDE_LABEL }}
+            className={`font-goudy-italic ${ct.bodyLg} mx-auto mt-4 max-w-2xl leading-relaxed px-2 sm:mt-5 md:mt-6`}
+            style={{ color: OUTSIDE_TEXT_MUTED }}
           >
-            For {coupleDisplayName}
+            Share a short note, wish, or prayer for {coupleDisplayName}. Every message becomes part
+            of their story.
           </p>
-          <h2
-            className="mx-auto my-4 max-w-[18ch] leading-[1.08] sm:my-5 md:my-6 md:max-w-none"
-            style={{
-              ...displayScript,
-              fontSize: "clamp(2.35rem, 7.5vw, 4.25rem)",
-              color: OUTSIDE_TEXT,
-              letterSpacing: "0.02em",
-              textShadow: OUTSIDE_TITLE_SHADOW,
-            }}
-          >
-            Love Notes &amp; Prayers
-          </h2>
-          <p
-            className={`${ct.bodyLg} max-w-2xl mx-auto leading-relaxed px-2`}
-            style={{ ...bodyFont, color: OUTSIDE_TEXT_MUTED }}
-          >
-            Share a short note, wish, or prayer for {coupleDisplayName}. Every message becomes part of their story.
-          </p>
-
-          <div className="flex items-center justify-center pt-2 sm:pt-3">
+          <div className="flex items-center justify-center pt-3 sm:pt-4">
             <span className="h-px w-16 sm:w-24 md:w-32 bg-white/50" />
           </div>
         </div>
 
-          {/* Form */}
-          <div className="flex justify-center mb-6 sm:mb-8 md:mb-10">
-            <div className="relative max-w-xl w-full">
-              <MessageForm onMessageSent={fetchMessages} />
-            </div>
+        {/* Form container */}
+        <div className="mb-6 flex justify-center sm:mb-8 md:mb-10">
+          <div className="relative w-full max-w-xl">
+            <MessageForm onMessageSent={fetchMessages} />
           </div>
+        </div>
 
         {/* Message wall */}
-        <div className="relative max-w-4xl mx-auto pb-2 sm:pb-3">
-          <div className="text-center mb-4 sm:mb-6 md:mb-8">
+        <div className="relative mx-auto max-w-4xl pb-2 sm:pb-3">
+          <div className="mb-4 text-center sm:mb-6 md:mb-8">
             <h3
-              className={`${cinzel.className} text-sm sm:text-base md:text-lg lg:text-xl font-semibold mb-1.5 sm:mb-2`}
+              className={`${cinzel.className} mb-1.5 text-sm font-semibold sm:mb-2 sm:text-base md:text-lg lg:text-xl`}
               style={{ color: OUTSIDE_TEXT }}
             >
               Messages from Loved Ones
             </h3>
-            <p className={ct.body} style={{ ...bodyFont, color: OUTSIDE_TEXT_MUTED }}>
+            <p className={`font-goudy-italic ${ct.body}`} style={{ color: OUTSIDE_TEXT_MUTED }}>
               Warm words from family and friends
             </p>
-
             <div className="flex items-center justify-center pt-3 sm:pt-4">
               <span className="h-px w-16 sm:w-24 md:w-32 bg-white/50" />
             </div>
@@ -380,6 +442,6 @@ export function Messages() {
           <MessageWallDisplay messages={messages} loading={loading} />
         </div>
       </div>
-    </Section>
+    </section>
   )
 }

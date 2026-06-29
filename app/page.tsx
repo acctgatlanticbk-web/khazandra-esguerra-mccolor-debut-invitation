@@ -91,25 +91,25 @@ export default function Home() {
               <MainHero visible={appState === AppState.DETAILS} />
               <Welcome />
                {/* <CoupleVideo />  */}
-              {/* <LoveStory /> */}
+              <LoveStory />
               <Countdown />
               <Gallery />
               <VideoMessage />
               <Messages />
               <Details />
-              <Accommodation />
+              {/* <Accommodation /> */}
               {/* <GuestInformation /> */}
-
+              <WeddingTimeline />
               <Entourage />
               <GuestList />
               <BookOfGuests />
-              {/* <WeddingTimeline /> */}
+      
               {/* <PrincipalSponsors /> */}
               <WeddingPlaylist />
               <FAQ />
               
               <Registry />
-              {/* <SnapShare /> */}
+              <SnapShare />
 
               <Footer />
             </div>

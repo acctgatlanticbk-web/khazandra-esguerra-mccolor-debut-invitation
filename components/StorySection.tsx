@@ -1,149 +1,132 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Cinzel } from "next/font/google";
-import Image from 'next/image';
-import {
-  coastalDarkBg,
-  coastalLightBg,
-  coastalPalette,
-} from '@/lib/coastal-palette';
+"use client"
 
-import { TornPaperEdge } from './TornPaperEdge';
+import React, { useEffect, useRef, useState } from "react"
+import localFont from "next/font/local"
+import Image from "next/image"
+import { TornPaperEdge } from "./TornPaperEdge"
 
-const cinzel = Cinzel({
-  subsets: ["latin"],
-  weight: "400",
+const theSeasons = localFont({
+  src: "../Font/Fontspring-DEMO-theseasons-reg.otf",
+  display: "swap",
+  variable: "--font-the-seasons",
 })
 
-const bodyFont: React.CSSProperties = {
-  fontFamily: "'SortsMillGoudy', Georgia, 'Times New Roman', serif",
-}
+const lightBg = "var(--color-welcome-bg)"
+const darkBg = "var(--color-welcome-navy)"
 
 interface StorySectionProps {
-  imageSrc: string;
-  title?: string;
-  text: React.ReactNode;
-  layout: 'image-left' | 'image-right';
-  theme: 'dark' | 'light';
-  isFirst?: boolean;
-  isLast?: boolean;
+  imageSrc: string
+  title?: string
+  text: React.ReactNode
+  layout: "image-left" | "image-right"
+  theme: "dark" | "light"
+  isFirst?: boolean
+  isLast?: boolean
 }
 
-export const StorySection: React.FC<StorySectionProps> = ({ 
-  imageSrc, 
-  title, 
-  text, 
-  layout, 
+export const StorySection: React.FC<StorySectionProps> = ({
+  imageSrc,
+  title,
+  text,
+  layout,
   theme,
   isFirst = false,
-  isLast = false
+  isLast = false,
 }) => {
-  const isDark = theme === 'dark';
-  
-  // Animation Hook
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const isDark = theme === "dark"
+
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
+          setIsVisible(true)
+          observer.unobserve(entry.target)
         }
       },
-      { threshold: 0.1 } 
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+      { threshold: 0.1 }
+    )
+    if (sectionRef.current) observer.observe(sectionRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   const imageFrameStyle = isDark
     ? {
-        background: `color-mix(in srgb, ${coastalPalette.lavenderBlue} 92%, white)`,
-        boxShadow: `0 10px 28px color-mix(in srgb, ${coastalPalette.deep} 22%, transparent)`,
+        background: "color-mix(in srgb, var(--color-welcome-bg) 12%, var(--color-welcome-navy))",
+        boxShadow:
+          "0 10px 28px color-mix(in srgb, var(--color-welcome-navy) 35%, transparent)",
       }
     : {
-        background: `color-mix(in srgb, ${coastalPalette.lavenderBlue} 95%, white)`,
-        border: `1px solid color-mix(in srgb, ${coastalPalette.blueGray} 45%, white)`,
-        boxShadow: `0 8px 24px color-mix(in srgb, ${coastalPalette.teal} 12%, transparent)`,
-      };
+        background: "var(--color-welcome-bg-soft)",
+        border: "1px solid color-mix(in srgb, var(--color-motif-deep) 10%, transparent)",
+        boxShadow:
+          "0 8px 24px color-mix(in srgb, var(--color-motif-deep) 7%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)",
+      }
 
-  // Rotation
-  const rotation = layout === 'image-left' ? 'rotate-1 md:rotate-2' : '-rotate-1 md:-rotate-2';
-
-  const flexDirection = layout === 'image-left' ? 'flex-row' : 'flex-row-reverse';
+  const rotation = layout === "image-left" ? "rotate-1 md:rotate-2" : "-rotate-1 md:-rotate-2"
+  const flexDirection = layout === "image-left" ? "flex-row" : "flex-row-reverse"
 
   return (
     <div
-      className="relative"
-      style={{
-        backgroundColor: isDark ? coastalDarkBg : coastalLightBg,
-      }}
+      className={`${theSeasons.variable} relative`}
+      style={{ background: isDark ? darkBg : lightBg }}
     >
-      
-      {/* Torn edges on light sections */}
       {!isDark && (
         <>
-          <div className="pointer-events-none absolute left-0 top-0 z-20 w-full -mt-[8px] md:-mt-[20px]">
-             <TornPaperEdge flipped={true} color={coastalLightBg} />
-          </div>
-          <div className="pointer-events-none absolute bottom-0 left-0 z-20 w-full -mb-[8px] md:-mb-[20px]">
-             <TornPaperEdge flipped={false} color={coastalLightBg} />
+          {!isFirst && (
+            <div className="pointer-events-none absolute left-0 top-0 z-20 -mt-[8px] w-full md:-mt-[20px]">
+              <TornPaperEdge flipped={true} color={lightBg} />
+            </div>
+          )}
+          <div className="pointer-events-none absolute bottom-0 left-0 z-20 -mb-[8px] w-full md:-mb-[20px]">
+            <TornPaperEdge flipped={false} color={lightBg} />
           </div>
         </>
       )}
-      <div 
+      <div
         ref={sectionRef}
-        className={`container mx-auto px-2 md:px-12 py-12 md:py-32 relative z-10 transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'} ${isFirst ? 'pt-16 md:pt-36' : ''} ${isLast ? 'pb-16 md:pb-36' : ''}`}
+        className={`container relative z-10 mx-auto px-2 py-12 transition-all duration-1000 ease-out md:px-12 md:py-32 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"} ${isFirst ? "pt-16 md:pt-36" : ""} ${isLast ? "pb-16 md:pb-36" : ""}`}
       >
         <div className={`flex ${flexDirection} items-center justify-between gap-3 md:gap-16`}>
-          
-          {/* Image Column */}
-          <div className="w-[45%] md:w-5/12 flex justify-center shrink-0">
-            <div className={`
-              relative w-full md:max-w-md 
-              transition-all duration-1000 delay-300 ease-out
-              ${rotation}
-              ${isVisible ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}
-            `}>
-               <div className="w-full p-1.5 md:p-3" style={imageFrameStyle}>
-                 <div className="aspect-[3/4] w-full overflow-hidden relative group">
-                   <Image
-                     src={imageSrc} 
-                     alt="Story Moment" 
-                     fill
-                     sizes="(max-width: 768px) 45vw, (max-width: 1024px) 40vw, 33vw"
-                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                     quality={90}
-                     priority={false}
-                   />
-                   {isDark && <div className="absolute inset-0 bg-black/5 mix-blend-multiply pointer-events-none z-10" />}
-                 </div>
-               </div>
+          <div className="flex w-[45%] shrink-0 justify-center md:w-5/12">
+            <div
+              className={`relative w-full transition-all delay-300 duration-1000 ease-out md:max-w-md ${rotation} ${isVisible ? "scale-100 opacity-100" : "scale-90 opacity-0"} `}
+            >
+              <div className="w-full p-1.5 md:p-3" style={imageFrameStyle}>
+                <div className="group relative aspect-[3/4] w-full overflow-hidden">
+                  <Image
+                    src={imageSrc}
+                    alt="Story Moment"
+                    fill
+                    sizes="(max-width: 768px) 45vw, (max-width: 1024px) 40vw, 33vw"
+                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                    quality={90}
+                    priority={false}
+                  />
+                  {isDark && (
+                    <div className="pointer-events-none absolute inset-0 z-10 bg-black/5 mix-blend-multiply" />
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-          {/* Text Column */}
+
           <div
             className="w-[55%] md:w-5/12"
-            style={{ color: isDark ? coastalPalette.cream : coastalPalette.body }}
+            style={{ color: isDark ? lightBg : "var(--color-welcome-text)" }}
           >
             {title && (
               <h2
-                className={`${cinzel.className} text-lg sm:text-2xl md:text-5xl lg:text-6xl mb-3 md:mb-6 tracking-wide leading-tight
-                transition-all duration-1000 delay-500
-                ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
-              `}
-                style={{ color: isDark ? coastalPalette.cream : coastalPalette.deep }}
+                className={`${theSeasons.className} mb-3 text-lg uppercase leading-tight tracking-[0.08em] transition-all delay-500 duration-1000 sm:text-2xl md:mb-6 md:text-3xl md:tracking-[0.12em] lg:text-4xl ${isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"} `}
+                style={{ color: isDark ? lightBg : "var(--color-welcome-navy)" }}
               >
                 {title}
               </h2>
             )}
-            
-            <div className={`text-[13px] leading-[1.6] sm:text-base md:text-xl lg:text-2xl md:leading-relaxed space-y-3 md:space-y-6
-              transition-all duration-1000 delay-700
-              ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
-              ${theme === 'light' ? 'italic font-normal' : 'font-light'}
-            `}
-              style={bodyFont}
+
+            <div
+              className={`font-goudy-italic space-y-3 text-[0.75rem] leading-[1.62] transition-all delay-700 duration-1000 sm:space-y-4 sm:text-[0.8125rem] sm:leading-[1.65] md:space-y-6 md:text-[0.84375rem] ${isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"} `}
             >
               {text}
             </div>
@@ -151,5 +134,5 @@ export const StorySection: React.FC<StorySectionProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

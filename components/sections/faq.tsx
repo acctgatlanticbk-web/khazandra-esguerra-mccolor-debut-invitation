@@ -4,37 +4,40 @@ import { useMemo, useState, type ReactNode } from "react"
 import type { SiteConfig } from "@/lib/site-config"
 import { ChevronDown } from "lucide-react"
 import { Cinzel } from "next/font/google"
+import localFont from "next/font/local"
 import { useSiteConfig } from "@/hooks/use-site-config"
-import {
-  coastalLightBg,
-  coastalPalette,
-  coastalTitleShadow,
-  displayScript,
-} from "@/lib/coastal-palette"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
+})
+
+const theSeasons = localFont({
+  src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  display: "swap",
+  variable: "--font-the-seasons",
+})
+
+const aboveTheBeyond = localFont({
+  src: "../../Font/above-the-beyond-script.otf",
+  display: "swap",
+  variable: "--font-above-beyond",
 })
 
 const CORNER_DECO_CLASS =
-  "block h-auto w-auto max-w-[120px] sm:max-w-[160px] md:max-w-[220px] lg:max-w-[260px]"
-
-const BLUE_SHELL_FILTER =
-  `brightness(0) saturate(100%) invert(58%) sepia(18%) saturate(612%) hue-rotate(152deg) brightness(95%) contrast(88%) drop-shadow(0 4px 14px color-mix(in srgb, ${coastalPalette.blueGray} 55%, transparent))`
+  "block h-auto w-auto max-w-[120px] sm:max-w-[180px] md:max-w-[260px] lg:max-w-[320px] xl:max-w-[380px]"
 
 const palette = {
-  body: coastalPalette.body,
-  heading: coastalPalette.deep,
-  label: coastalPalette.dustyRose,
-  accent: coastalPalette.title,
-  deep: coastalPalette.deep,
-  cream: coastalPalette.cream,
+  body: "var(--color-welcome-text)",
+  heading: "var(--color-welcome-navy)",
+  label: "var(--color-welcome-heading)",
+  accent: "var(--color-welcome-green)",
 } as const
 
-const bodyFont: React.CSSProperties = {
-  fontFamily: "'SortsMillGoudy', Georgia, serif",
-}
+const dividerLineStyle = {
+  background:
+    "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-motif-deep) 38%, transparent), transparent)",
+} as const
 
 const ct = {
   label: "text-[11px] sm:text-xs md:text-sm",
@@ -46,14 +49,13 @@ const ct = {
 const linkClass =
   "underline font-semibold transition-colors hover:opacity-80"
 
-const glassCardStyle = {
-  backgroundColor: `color-mix(in srgb, ${coastalPalette.cream} 38%, transparent)`,
-  borderColor: "rgba(255, 255, 255, 0.62)",
-  boxShadow: `0 28px 72px color-mix(in srgb, ${coastalPalette.teal} 10%, transparent), 0 12px 32px color-mix(in srgb, ${coastalPalette.blueGray} 16%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.82), inset 0 -1px 0 rgba(255, 255, 255, 0.12)`,
-} as const
-
-const glassAmbientGlowStyle = {
-  background: `linear-gradient(135deg, color-mix(in srgb, ${coastalPalette.blueGray} 32%, transparent) 0%, color-mix(in srgb, ${coastalPalette.dustyRose} 22%, transparent) 48%, color-mix(in srgb, ${coastalPalette.teal} 18%, transparent) 100%)`,
+const cardStyle = {
+  background: "var(--color-welcome-bg)",
+  borderWidth: "1px",
+  borderStyle: "solid",
+  borderColor: "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+  boxShadow:
+    "0 8px 28px color-mix(in srgb, var(--color-motif-deep) 7%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)",
 } as const
 
 interface FAQItem {
@@ -61,19 +63,77 @@ interface FAQItem {
   answer: string | ReactNode
 }
 
+function OrnamentalDivider() {
+  return (
+    <div className="flex items-center justify-center gap-1.5">
+      <span className="h-px w-6 sm:w-10" style={dividerLineStyle} />
+      <span className="h-0.5 w-0.5 rounded-full bg-motif-deep/45 sm:h-1 sm:w-1" aria-hidden />
+      <span
+        className="h-px w-6 sm:w-10"
+        style={{
+          background:
+            "linear-gradient(to left, transparent, color-mix(in srgb, var(--color-motif-deep) 38%, transparent))",
+        }}
+      />
+    </div>
+  )
+}
+
+function FaqTitle() {
+  return (
+    <h2
+      className="relative mx-auto w-full max-w-full text-center"
+      style={
+        {
+          "--title-size": "clamp(2.15rem, 11vw, 4.5rem)",
+          "--script-size": "clamp(1.1rem, 4.5vw, 2.25rem)",
+          "--script-overlap": "clamp(-0.65rem, -2.8vw, -1.5rem)",
+        } as React.CSSProperties
+      }
+    >
+      <span
+        className={`${theSeasons.className} block uppercase leading-[0.78] tracking-[0.08em] min-[400px]:tracking-[0.11em] sm:tracking-[0.15em] md:tracking-[0.18em]`}
+        style={{
+          fontSize: "var(--title-size)",
+          color: "var(--color-welcome-navy)",
+        }}
+      >
+        Frequently Asked Questions
+      </span>
+      <span
+        aria-hidden
+        className={`${aboveTheBeyond.className} relative z-10 mx-auto block w-fit max-w-full px-1 leading-[0.88] sm:leading-[0.9]`}
+        style={{
+          marginTop: "var(--script-overlap)",
+          fontSize: "var(--script-size)",
+          color: "var(--color-welcome-green)",
+          textShadow:
+            "0 1px 0 color-mix(in srgb, var(--color-welcome-bg) 95%, white), 0 0 10px color-mix(in srgb, var(--color-welcome-bg) 65%, white)",
+        }}
+      >
+        Everything you need to know
+      </span>
+      <span className="sr-only">Everything you need to know</span>
+    </h2>
+  )
+}
+
 function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
+  const guestArrival = siteConfig.ceremony.guestsTime ?? "30–45 minutes before the ceremony"
+  const dressTheme = siteConfig.dressCode.theme
+
   return [
     {
       question: "When is the wedding?",
-      answer: `Our wedding will be held on ${siteConfig.ceremony.date} (${siteConfig.ceremony.day})`,
+      answer: `Our wedding will be held on ${siteConfig.ceremony.date} (${siteConfig.ceremony.day}).`,
     },
     {
       question: "What time should I arrive for the ceremony?",
-      answer: `Our ceremony will begin promptly at ${siteConfig.ceremony.time}. We kindly ask guests to arrive 30–45 minutes earlier to allow enough time for parking, walking to the ceremony area, and finding your seats so we can begin on time.`,
+      answer: `Our ceremony will begin promptly at ${siteConfig.ceremony.time}. We kindly ask guests to arrive by ${guestArrival} to allow enough time for parking, walking to the ceremony area, and finding your seats so we can begin on time.`,
     },
     {
       question: "Where will the ceremony and reception take place?",
-      answer: `The ceremony and reception will be held at ${siteConfig.ceremony.location}, ${siteConfig.ceremony.venue}. You can find detailed directions, addresses, and maps in the Details section above.`,
+      answer: `The ceremony will be held at ${siteConfig.ceremony.location}, ${siteConfig.ceremony.venue} at ${siteConfig.ceremony.time}. The reception will follow at ${siteConfig.reception.location}, ${siteConfig.reception.venue} at ${siteConfig.reception.time}. You can find detailed directions, addresses, and maps in the Event Details section above.`,
     },
     {
       question: "How do I RSVP?",
@@ -92,33 +152,11 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
             guest list
           </a>{" "}
           on this invitation: search for your name and confirm your attendance.
-          {"\n"}
-          Please respond by{" "}
-          {siteConfig.details.rsvp.deadline.replace(/\.\s*$/, "")}.
-          {"\n"}
-          If you have questions, message{" "}
-
-          or coordinator : {siteConfig.details.rsvp.coordinator} : {siteConfig.details.rsvp.phone} .
-          <a
-            href="https://www.facebook.com/d.allison.CADA"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={linkClass}
-            style={{ color: palette.accent }}
-          >
-            {siteConfig.couple.bride}
-          </a>{" "}
-          or{" "}
-          <a
-            href="https://www.facebook.com/${siteConfig.couple.groom}"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={linkClass}
-            style={{ color: palette.accent }}
-          >
-            {siteConfig.couple.groom}
-          </a>{" "}
-          on Messenger.
+          {"\n\n"}
+          Please respond by {siteConfig.details.rsvp.deadline.replace(/\.\s*$/, "")}.
+          {"\n\n"}
+          If you have questions, please contact our coordinator {siteConfig.details.rsvp.coordinator} at{" "}
+          {siteConfig.details.rsvp.phone}.
         </>
       ),
     },
@@ -158,11 +196,10 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
       answer:
         "Yes, parking is available at the venue, and parking attendants, along with our coordinators, will assist you on the day.",
     },
-    // {
-    //   question: "Will there be a wedding gift registry?",
-    //   answer:
-    //     "With all that we have, we are truly blessed. Your presence and prayers are what we request most. However, if you desire to give nonetheless, a monetary gift to help us begin our new life together would be humbly appreciated. You can find our gift registry information in the Gift Guide section.",
-    // },
+    {
+      question: "What is the dress code?",
+      answer: `${dressTheme}. ${siteConfig.dressCode.note} You can find outfit inspiration and palette details in the Event Details section above.`,
+    },
     {
       question: "Unplugged Ceremony",
       answer:
@@ -185,8 +222,7 @@ function getFaqItems(siteConfig: SiteConfig): FAQItem[] {
     },
     {
       question: "How can I help the couple have a great time during their wedding?",
-      answer:
-        "• Pray with us for favorable weather and the continuous blessings of our Lord as we enter this new chapter of our lives as husband and wife.\n\n• RSVP as soon as your schedule is cleared.\n\n• Dress appropriately and follow our wedding motif.\n\n• Be on time.\n\n• Follow the seating arrangement in the reception.\n\n• Stay until the end of the program.\n\n• Join the activities and enjoy!",
+      answer: `• Pray with us for favorable weather and the continuous blessings of our Lord as we enter this new chapter of our lives as husband and wife.\n\n• RSVP as soon as your schedule is cleared.\n\n• Dress appropriately and follow our ${dressTheme} dress code.\n\n• Be on time.\n\n• Follow the seating arrangement in the reception.\n\n• Stay until the end of the program.\n\n• Join the activities and enjoy!`,
     },
   ]
 }
@@ -195,41 +231,18 @@ function FaqAnswer({ answer }: { answer: string | ReactNode }) {
   if (typeof answer !== "string") {
     return (
       <div
-        className={`${ct.body} leading-relaxed whitespace-pre-line`}
-        style={{ ...bodyFont, color: palette.body }}
+        className={`font-goudy-italic ${ct.body} leading-relaxed whitespace-pre-line`}
+        style={{ color: palette.body }}
       >
         {answer}
       </div>
     )
   }
 
-  if (answer.includes("[RSVP_LINK]")) {
-    return (
-      <p
-        className={`${ct.body} leading-relaxed whitespace-pre-line`}
-        style={{ ...bodyFont, color: palette.body }}
-      >
-        {answer.split("[RSVP_LINK]")[0]}
-        <a
-          href="#guest-list"
-          className={linkClass}
-          style={{ color: palette.accent }}
-          onClick={(e) => {
-            e.preventDefault()
-            document.getElementById("guest-list")?.scrollIntoView({ behavior: "smooth" })
-          }}
-        >
-          {answer.match(/\[RSVP_LINK\](.*?)\[\/RSVP_LINK\]/)?.[1]}
-        </a>
-        {answer.split("[/RSVP_LINK]")[1]}
-      </p>
-    )
-  }
-
   return (
     <p
-      className={`${ct.body} leading-relaxed whitespace-pre-line`}
-      style={{ ...bodyFont, color: palette.body }}
+      className={`font-goudy-italic ${ct.body} leading-relaxed whitespace-pre-line`}
+      style={{ color: palette.body }}
     >
       {answer}
     </p>
@@ -238,8 +251,6 @@ function FaqAnswer({ answer }: { answer: string | ReactNode }) {
 
 export function FAQ() {
   const siteConfig = useSiteConfig()
-  const { brideNickname, groomNickname } = siteConfig.couple
-  const coupleDisplayName = `${groomNickname} & ${brideNickname}`
   const faqItems = useMemo(() => getFaqItems(siteConfig), [siteConfig])
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
@@ -250,140 +261,134 @@ export function FAQ() {
   return (
     <section
       id="faq"
-      className="relative z-10 pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14 isolate overflow-hidden"
-      style={{ backgroundColor: coastalLightBg }}
+      className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative z-10 isolate overflow-hidden pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14`}
+      style={{ background: "var(--color-welcome-bg)" }}
     >
-      {/* Shell corner decorations */}
-      <div className="pointer-events-none absolute left-0 top-0 z-[1]">
+      {/* Corner decorations */}
+      <div className="pointer-events-none absolute left-0 top-0 z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/decoration/top-left-shell-deco.png"
+          src="/decoration/decoration/left-top-decoration.png"
           alt=""
           className={CORNER_DECO_CLASS}
-          style={{ filter: BLUE_SHELL_FILTER }}
         />
       </div>
-      <div className="pointer-events-none absolute bottom-0 right-0 z-[1]">
+      <div className="pointer-events-none absolute right-0 top-0 z-10">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/decoration/right-bottom-shell-deco.png"
+          src="/decoration/decoration/right-top-decoration.png"
           alt=""
           className={CORNER_DECO_CLASS}
-          style={{ filter: BLUE_SHELL_FILTER }}
+        />
+      </div>
+      <div className="pointer-events-none absolute bottom-0 left-0 z-10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/decoration/decoration/left-bottom-decoration%20(2).png"
+          alt=""
+          className={CORNER_DECO_CLASS}
+        />
+      </div>
+      <div className="pointer-events-none absolute bottom-0 right-0 z-10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/decoration/decoration/right-bottom-decoration%20(2).png"
+          alt=""
+          className={CORNER_DECO_CLASS}
         />
       </div>
 
       {/* Header */}
-      <div className="relative z-20 text-center mb-6 sm:mb-8 md:mb-10 px-6 sm:px-10 md:px-12">
+      <div className="relative z-20 px-6 text-center sm:px-10 md:px-12">
+        <div className="mx-auto mb-5 sm:mb-6 md:mb-7">
+          <OrnamentalDivider />
+        </div>
+        <div className="mx-auto mt-2 sm:mt-3 md:mt-4">
+          <FaqTitle />
+        </div>
         <p
-          className={`${cinzel.className} ${ct.label} uppercase tracking-[0.2em] sm:tracking-[0.24em] mb-2`}
-          style={{ color: coastalPalette.dustyRose }}
-        >
-          For {coupleDisplayName}
-        </p>
-        <h2
-          className="mx-auto my-4 whitespace-nowrap text-center sm:my-5 md:my-6 leading-[1.08]"
-          style={{
-            ...displayScript,
-            fontSize: "clamp(1.35rem, 3.2vw + 0.5rem, 4.25rem)",
-            color: coastalPalette.title,
-            letterSpacing: "0.02em",
-            textShadow: coastalTitleShadow,
-          }}
-        >
-          Frequently Asked Questions
-        </h2>
-        <p
-          className={`${ct.bodyLg} max-w-2xl mx-auto leading-relaxed px-2`}
-          style={{ ...bodyFont, color: coastalPalette.body }}
+          className={`font-goudy-italic ${ct.bodyLg} mx-auto mt-4 max-w-2xl leading-relaxed px-2 sm:mt-5 md:mt-6`}
+          style={{ color: palette.body }}
         >
           Helpful notes so you can simply arrive, celebrate, and enjoy this new chapter with us.
         </p>
-        <div className="flex items-center justify-center pt-2 sm:pt-3">
-          <span
-            className="h-px w-16 sm:w-24 md:w-32"
-            style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.blueGray} 70%, white)` }}
-          />
+        <div className="flex items-center justify-center pt-3 sm:pt-4">
+          <span className="h-px w-16 sm:w-24 md:w-32" style={dividerLineStyle} />
         </div>
       </div>
 
       {/* FAQ accordion */}
-      <div className="relative z-20 max-w-3xl mx-auto px-4 sm:px-6 md:px-8 my-6 sm:my-8 md:my-10 mb-12 sm:mb-16 md:mb-20">
-        <div className="relative">
+      <div className="relative z-20 mx-auto my-6 mb-12 max-w-3xl px-4 sm:my-8 sm:px-6 md:my-10 md:mb-20 md:px-8">
+        <div
+          className="relative overflow-hidden rounded-xl border backdrop-blur-xl sm:rounded-2xl sm:backdrop-blur-2xl"
+          style={cardStyle}
+        >
           <div
-            className="pointer-events-none absolute -inset-1 rounded-2xl opacity-50 blur-2xl sm:-inset-2"
-            style={glassAmbientGlowStyle}
+            className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-white/35 via-white/8 to-transparent"
             aria-hidden
           />
-          <div
-            className="relative z-20 rounded-xl sm:rounded-2xl border backdrop-blur-xl sm:backdrop-blur-2xl overflow-hidden"
-            style={glassCardStyle}
-          >
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 via-white/10 to-transparent" aria-hidden />
-            <div
-              className="pointer-events-none absolute inset-0 rounded-xl sm:rounded-2xl ring-1 ring-inset ring-white/35"
-              aria-hidden
-            />
 
-            <div className="relative z-20 p-3 sm:p-4 md:p-5 space-y-2 sm:space-y-2.5">
-              {faqItems.map((item, index) => {
-                const isOpen = openIndex === index
-                const contentId = `faq-item-${index}`
-                return (
-                  <div
-                    key={index}
-                    className="relative z-20 rounded-xl border transition-all duration-300"
-                    style={{
-                      borderColor: isOpen
-                        ? `color-mix(in srgb, ${coastalPalette.teal} 35%, white)`
-                        : `color-mix(in srgb, ${coastalPalette.blueGray} 30%, white)`,
-                      backgroundColor: `color-mix(in srgb, ${coastalPalette.cream} 42%, white)`,
-                      boxShadow: isOpen
-                        ? `0 4px 16px color-mix(in srgb, ${coastalPalette.teal} 8%, transparent)`
-                        : "none",
-                    }}
+          <div className="relative z-20 space-y-2 p-3 sm:space-y-2.5 sm:p-4 md:p-5">
+            {faqItems.map((item, index) => {
+              const isOpen = openIndex === index
+              const contentId = `faq-item-${index}`
+              return (
+                <div
+                  key={index}
+                  className="relative z-20 rounded-xl border transition-all duration-300"
+                  style={{
+                    borderColor: isOpen
+                      ? "color-mix(in srgb, var(--color-welcome-green) 35%, transparent)"
+                      : "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+                    backgroundColor: "var(--color-welcome-bg-soft)",
+                    boxShadow: isOpen
+                      ? "0 4px 16px color-mix(in srgb, var(--color-motif-deep) 8%, transparent)"
+                      : "none",
+                  }}
+                >
+                  <button
+                    onClick={() => toggleItem(index)}
+                    className="group flex w-full items-center justify-between px-3 py-2.5 text-left outline-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:px-4 sm:py-3 md:px-5"
+                    style={{ outlineColor: palette.accent }}
+                    aria-expanded={isOpen}
+                    aria-controls={contentId}
                   >
-                    <button
-                      onClick={() => toggleItem(index)}
-                      className="group w-full px-3 sm:px-4 md:px-5 py-2.5 sm:py-3 flex items-center justify-between text-left outline-none transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                      style={{ outlineColor: coastalPalette.teal }}
-                      aria-expanded={isOpen}
-                      aria-controls={contentId}
+                    <span
+                      className={`${cinzel.className} ${ct.question} pr-3 font-semibold leading-snug transition-colors duration-200`}
+                      style={{ color: isOpen ? palette.accent : palette.heading }}
                     >
-                      <span
-                        className={`${cinzel.className} ${ct.question} font-semibold pr-3 leading-snug transition-colors duration-200`}
-                        style={{ color: isOpen ? palette.accent : palette.heading }}
-                      >
-                        {item.question}
-                      </span>
-                      <ChevronDown
-                        size={18}
-                        className={`flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
-                        style={{ color: isOpen ? palette.accent : palette.label }}
-                        aria-hidden
-                      />
-                    </button>
+                      {item.question}
+                    </span>
+                    <ChevronDown
+                      size={18}
+                      className={`h-4 w-4 flex-shrink-0 transition-transform duration-300 sm:h-5 sm:w-5 ${isOpen ? "rotate-180" : ""}`}
+                      style={{ color: isOpen ? palette.accent : palette.label }}
+                      aria-hidden
+                    />
+                  </button>
 
-                    <div
-                      id={contentId}
-                      role="region"
-                      className={`grid transition-all duration-300 ease-out ${
-                        isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                      }`}
-                    >
-                      <div className="overflow-hidden">
-                        <div
-                          className="px-3 sm:px-4 md:px-5 pb-3 sm:pb-4 pt-0 border-t"
-                          style={{ borderColor: `color-mix(in srgb, ${coastalPalette.blueGray} 25%, white)` }}
-                        >
-                          <FaqAnswer answer={item.answer} />
-                        </div>
+                  <div
+                    id={contentId}
+                    role="region"
+                    className={`grid transition-all duration-300 ease-out ${
+                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div
+                        className="border-t px-3 pb-3 pt-0 sm:px-4 sm:pb-4 md:px-5"
+                        style={{
+                          borderColor:
+                            "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+                        }}
+                      >
+                        <FaqAnswer answer={item.answer} />
                       </div>
                     </div>
                   </div>
-                )
-              })}
-            </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

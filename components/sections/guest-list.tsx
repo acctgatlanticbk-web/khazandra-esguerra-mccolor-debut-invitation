@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Section } from "@/components/section"
 import {
   Search,
   CheckCircle,
@@ -18,18 +17,30 @@ import {
   UserPlus,
   Users,
 } from "lucide-react"
-import { Cormorant_Garamond, Cinzel } from "next/font/google"
+import { Cinzel } from "next/font/google"
+import localFont from "next/font/local"
 import { useSiteConfig } from "@/hooks/use-site-config"
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400"],
-})
 
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "600", "700"],
 })
+
+const theSeasons = localFont({
+  src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  display: "swap",
+  variable: "--font-the-seasons",
+})
+
+const aboveTheBeyond = localFont({
+  src: "../../Font/above-the-beyond-script.otf",
+  display: "swap",
+  variable: "--font-above-beyond",
+})
+
+const OUTSIDE_TEXT = "#FFFFFF"
+const OUTSIDE_TEXT_MUTED = "rgba(255, 255, 255, 0.88)"
+const OUTSIDE_TITLE_SHADOW = "0 2px 6px rgba(0,0,0,0.28), 0 0 18px rgba(0,0,0,0.12)"
 
 interface ApiGuest {
   id: string | number
@@ -395,56 +406,84 @@ export function GuestList() {
   }
 
   return (
-    <Section id="guest-list" className="relative z-30 py-6 sm:py-10 md:py-12 lg:py-16">
+    <section
+      id="guest-list"
+      className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative z-30 bg-transparent py-6 sm:py-10 md:py-12 lg:py-16`}
+    >
       {/* Header */}
-      <div className="relative z-10 text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10 px-2 sm:px-3 md:px-4">
-        {/* Small label */}
-        <p
-          className={`${cormorant.className} text-xs sm:text-sm md:text-base uppercase tracking-[0.28em] text-white mb-2`}
-          style={{ textShadow: "0 2px 10px rgba(0,0,0,0.8)" }}
+      <div className="relative z-10 mb-4 px-2 text-center sm:mb-6 sm:px-3 md:mb-8 md:px-4 lg:mb-10">
+        {/* Ornamental divider */}
+        <div className="mx-auto mb-5 flex items-center justify-center gap-1.5 sm:mb-6 md:mb-7">
+          <span className="h-px w-6 sm:w-10" style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.55), transparent)" }} />
+          <span className="h-0.5 w-0.5 rounded-full bg-white/50 sm:h-1 sm:w-1" aria-hidden />
+          <span className="h-px w-6 sm:w-10" style={{ background: "linear-gradient(to left, transparent, rgba(255,255,255,0.55), transparent)" }} />
+        </div>
+
+        {/* Title block */}
+        <div
+          className="relative mx-auto mt-2 w-full max-w-full text-center sm:mt-3 md:mt-4"
+          style={
+            {
+              "--title-size": "clamp(2.15rem, 11vw, 4.5rem)",
+              "--script-size": "clamp(1.1rem, 4.5vw, 2.25rem)",
+              "--script-overlap": "clamp(-0.65rem, -2.8vw, -1.5rem)",
+            } as React.CSSProperties
+          }
         >
-          CONFIRM YOUR ATTENDANCE (RSVP)
-        </p>
-        
-        <h2
-          className={`${cinzel.className} text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-1.5 sm:mb-3 md:mb-4`}
-          style={{ textShadow: "0 4px 18px rgba(0,0,0,0.85)" }}
-        >
-          RSVP
-        </h2>
-        
-        <p className={`${cormorant.className} text-sm sm:text-base md:text-lg text-white/90 font-light max-w-xl mx-auto leading-relaxed px-2 mb-2 sm:mb-3`}>
-        To help us plan a beautiful and intimate celebration, we kindly ask that you confirm your attendance. Please search for your name below to confirm your presence at our special day
-        </p>
-        
-        <p className={`${cormorant.className} text-sm sm:text-base md:text-lg text-white/90 font-light max-w-xl mx-auto leading-relaxed px-2 mb-2 sm:mb-3`}>
-        If we do not receive your response by the deadline, we will assume you are unable to attend.
-Thank you for your love and support. We truly look forward to celebrating this special day with you.
-        </p>
-        <p className={`${cormorant.className} text-sm sm:text-base md:text-lg text-white/90 font-light max-w-xl mx-auto leading-relaxed px-2 mb-2 sm:mb-3`}>
-          Phone: {siteConfig.details.rsvp.phone}
-        </p>
-        <p className={`${cormorant.className} text-sm sm:text-base md:text-lg lg:text-xl text-white font-bold max-w-xl mx-auto leading-relaxed px-2 mb-2 sm:mb-3`}>
-          RSVP Deadline: {siteConfig.details.rsvp.deadline}
-        </p>
-        <p className={`${cormorant.className} text-sm sm:text-base md:text-lg lg:text-xl text-white font-bold max-w-xl mx-auto leading-relaxed px-2 mb-2 sm:mb-3`}>
-          Coordinator: {siteConfig.details.rsvp.coordinator}
-        </p>
-        
-        {/* Decorative element below subtitle */}
-        <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-2 sm:mt-3 md:mt-4 lg:mt-5">
-          <div className="w-6 sm:w-8 md:w-12 lg:w-16 h-px bg-gradient-to-r from-transparent via-motif-deep/80 to-transparent" />
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-motif-deep/90 rounded-full" />
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white/85 rounded-full" />
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-motif-deep/90 rounded-full" />
-          <div className="w-6 sm:w-8 md:w-12 lg:w-16 h-px bg-gradient-to-l from-transparent via-motif-deep/80 to-transparent" />
+          <span
+            className={`${theSeasons.className} block uppercase leading-[0.78] tracking-[0.08em] min-[400px]:tracking-[0.11em] sm:tracking-[0.15em] md:tracking-[0.18em]`}
+            style={{ fontSize: "var(--title-size)", color: OUTSIDE_TEXT, textShadow: OUTSIDE_TITLE_SHADOW }}
+          >
+            RSVP
+          </span>
+          <span
+            aria-hidden
+            className={`${aboveTheBeyond.className} relative z-10 mx-auto block w-fit max-w-full px-1 leading-[0.88] sm:leading-[0.9]`}
+            style={{
+              marginTop: "var(--script-overlap)",
+              fontSize: "var(--script-size)",
+              color: OUTSIDE_TEXT_MUTED,
+              textShadow: OUTSIDE_TITLE_SHADOW,
+            }}
+          >
+            Confirm your attendance
+          </span>
+        </div>
+
+        {/* Subtitle block */}
+        <div className="mx-auto mt-5 max-w-xl space-y-2 px-2 sm:mt-6 sm:space-y-3">
+          <p className={`font-goudy-italic text-xs leading-relaxed sm:text-sm md:text-base`} style={{ color: OUTSIDE_TEXT_MUTED }}>
+            To help us plan a beautiful and intimate celebration, we kindly ask that you confirm your
+            attendance. Please search for your name below to confirm your presence at our special day.
+          </p>
+          <p className={`font-goudy-italic text-xs leading-relaxed sm:text-sm md:text-base`} style={{ color: OUTSIDE_TEXT_MUTED }}>
+            If we do not receive your response by the deadline, we will assume you are unable to attend.
+          </p>
+          <p className={`${cinzel.className} text-xs font-semibold tracking-wide sm:text-sm`} style={{ color: OUTSIDE_TEXT }}>
+            RSVP Deadline: {siteConfig.details.rsvp.deadline}
+          </p>
+          <p className={`${cinzel.className} text-xs font-semibold tracking-wide sm:text-sm`} style={{ color: OUTSIDE_TEXT }}>
+            Coordinator: {siteConfig.details.rsvp.coordinator} · {siteConfig.details.rsvp.phone}
+          </p>
+        </div>
+
+        {/* Divider below header */}
+        <div className="mt-4 flex items-center justify-center sm:mt-5">
+          <span className="h-px w-16 sm:w-24 md:w-32 bg-white/50" />
         </div>
       </div>
 
       {/* Search Section */}
       <div className="relative z-10 max-w-2xl mx-auto px-2 sm:px-4 md:px-6 overflow-visible">
         {/* Card with elegant border */}
-        <div className="relative bg-white/10 backdrop-blur-md border border-motif-deep/60 rounded-lg sm:rounded-xl md:rounded-2xl shadow-lg overflow-visible">
+        <div
+          className="relative overflow-visible rounded-lg border backdrop-blur-xl sm:rounded-xl md:rounded-2xl"
+          style={{
+            background: "var(--color-welcome-bg)",
+            borderColor: "color-mix(in srgb, var(--color-motif-deep) 18%, transparent)",
+            boxShadow: "0 8px 28px color-mix(in srgb, var(--color-motif-deep) 7%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)",
+          }}
+        >
           {/* Card content */}
           <div className="relative p-2.5 sm:p-4 md:p-5 lg:p-6 overflow-visible">
             <div className="relative z-10 space-y-3 sm:space-y-4 overflow-visible">
@@ -453,10 +492,10 @@ Thank you for your love and support. We truly look forward to celebrating this s
                   <Search className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white" />
                 </div>
                 <div>
-                  <label className="block text-xs sm:text-sm md:text-base font-semibold text-white font-sans mb-0.5 sm:mb-1">
+                  <label className="block text-xs sm:text-sm md:text-base font-semibold font-sans mb-0.5 sm:mb-1" style={{ color: "var(--color-welcome-navy)" }}>
                     Find Your Name
                   </label>
-                  <p className="text-[10px] sm:text-xs text-motif-cream font-sans">
+                  <p className="text-[10px] sm:text-xs font-sans" style={{ color: "var(--color-welcome-text)" }}>
                     Type as you search to see instant results
                   </p>
                 </div>
@@ -576,10 +615,10 @@ Thank you for your love and support. We truly look forward to celebrating this s
                         You're Invited!
                       </h3>
                     </div>
-                    <p className={`${cormorant.className} text-motif-cream/95 text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg leading-tight sm:leading-normal`}>
+                    <p className={`font-goudy-italic text-motif-cream/95 text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg leading-tight sm:leading-normal`}>
                       Hello <span className="font-extrabold text-motif-cream">{selectedGuest?.Name}</span>, you are invited to our wedding!
                     </p>
-                    <p className={`${cormorant.className} text-motif-cream/90 text-[10px] sm:text-xs md:text-sm mt-1 sm:mt-1.5`}>
+                    <p className={`font-goudy-italic text-motif-cream/90 text-[10px] sm:text-xs md:text-sm mt-1 sm:mt-1.5`}>
                       We've reserved <span className="font-bold text-motif-cream">{selectedGuest?.AllowedGuests || 1}</span> {selectedGuest?.AllowedGuests === 1 ? 'seat' : 'seats'} for you.
                     </p>
                   </div>
@@ -663,7 +702,7 @@ Thank you for your love and support. We truly look forward to celebrating this s
                   >
                     {/* Can you attend? */}
                     <div>
-                    <label className={`flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-semibold text-motif-deep mb-1.5 sm:mb-2 ${cormorant.className}`}>
+                    <label className={`flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-semibold text-motif-deep mb-1.5 sm:mb-2 font-goudy-italic`}>
                         <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-motif-deep flex-shrink-0" />
                         <span>Can you attend? *</span>
                       </label>
@@ -724,7 +763,7 @@ Thank you for your love and support. We truly look forward to celebrating this s
                     {/* Who's Coming With You - Companion Names */}
                     {formData.RSVP === "Yes" && companions.length > 0 && (
                       <div className="space-y-2.5 sm:space-y-3">
-                        <label className={`flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-semibold text-motif-deep ${cormorant.className}`}>
+                        <label className={`flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-semibold text-motif-deep font-goudy-italic`}>
                           <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-motif-deep flex-shrink-0" />
                           <span>Who's Coming With You?</span>
                         </label>
@@ -878,17 +917,17 @@ Thank you for your love and support. We truly look forward to celebrating this s
 
                   {/* Response subtitle */}
                   {formData.RSVP === "Yes" && (
-                    <p className={`${cormorant.className} text-sm text-motif-deep leading-snug`}>
+                    <p className={`font-goudy-italic text-sm text-motif-deep leading-snug`}>
                       We&apos;re thrilled you&apos;ll be joining us — your spot is saved!
                     </p>
                   )}
                   {formData.RSVP === "No" && (
-                    <p className={`${cormorant.className} text-sm text-motif-deep leading-snug`}>
+                    <p className={`font-goudy-italic text-sm text-motif-deep leading-snug`}>
                       We&apos;ll miss you, but thank you for letting us know.
                     </p>
                   )}
                   {!formData.RSVP && (
-                    <p className={`${cormorant.className} text-sm text-motif-deep leading-snug`}>
+                    <p className={`font-goudy-italic text-sm text-motif-deep leading-snug`}>
                       Thank you for your response!
                     </p>
                   )}
@@ -901,7 +940,7 @@ Thank you for your love and support. We truly look forward to celebrating this s
                   </div>
 
                   {/* Nudge text */}
-                  <p className={`${cormorant.className} text-sm text-motif-deep/65 leading-relaxed mb-4`}>
+                  <p className={`font-goudy-italic text-sm text-motif-deep/65 leading-relaxed mb-4`}>
                     Before you go, leave a message for the couple — your words will be a cherished memory they can always look back on.
                   </p>
 
@@ -965,7 +1004,7 @@ Thank you for your love and support. We truly look forward to celebrating this s
                         Request to Join
                       </h3>
                     </div>
-                    <p className={`${cormorant.className} text-motif-cream/95 text-[10px] sm:text-xs md:text-sm lg:text-base font-sans leading-tight sm:leading-normal`}>
+                    <p className={`font-goudy-italic text-motif-cream/95 text-[10px] sm:text-xs md:text-sm lg:text-base font-sans leading-tight sm:leading-normal`}>
                       {requestFormData.Name ? (
                         <>Hi <span className="font-extrabold text-motif-cream">{requestFormData.Name}</span> — want to celebrate with us? Send a request!</>
                       ) : (
@@ -1168,6 +1207,6 @@ Thank you for your love and support. We truly look forward to celebrating this s
           </div>
         </div>
       )}
-    </Section>
+    </section>
   )
 }

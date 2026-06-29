@@ -29,6 +29,27 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Beautiful Malera';
+  src: url('../Font/Beautiful-Malera-Demo-BF6a36e658b295b.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('../Font/Fontspring-DEMO-theseasons-reg.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Above the Beyond';
+  src: url('../Font/above-the-beyond-script.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -117,17 +138,37 @@
   --font-serif: "Great Vibes", "Great Vibes Fallback";
 
   /* ─── Motif palette — edit here, affects every component ─── */
-  --color-motif-cream:   #FFF6E9; /* Soft Blush Peach */
-  --color-motif-yellow:  #DFCFD0; /* Dusty Rose Gray */
+  /* Background */
+  --color-motif-cream:   #FAE6C3; /* Warm Champagne Cream */
 
-  --color-motif-soft:    #DDE1ED; /* Misty Blue */
-  --color-motif-accent:  #94B8C8; /* Powder Blue */
+  /* Primary Highlight */
+  --color-motif-yellow:  #F8E086; /* Soft Golden Yellow */
 
-  --color-motif-deep:    #94B8C8; /* Primary Accent */
-  --color-motif-medium:  #C0D0DD; /* Soft Sky Blue */
-  --color-motif-silver:  #DFCFD0; /* Elegant Neutral */
+  /* Secondary */
+  --color-motif-soft:    #A7D4F5; /* Dusty Sky Blue */
+  --color-motif-accent:  #808874; /* Dusty Blue */
+
+  /* Primary Brand */
+  --color-motif-deep:    #7BACD4; /* Primary Dusty Blue */
+  --color-motif-medium:  #808874; /* Light Dusty Blue */
+
+  /* Neutral */
+  --color-motif-silver:  #F4EFD9; /* Soft Champagne White */
+
+  /* Welcome section — readable on whitened cream */
+  --color-welcome-bg:        color-mix(in srgb, var(--color-motif-cream) 38%, white);
+  --color-welcome-bg-soft:   color-mix(in srgb, var(--color-motif-cream) 22%, white);
+  --color-welcome-text:      #3A3530;
+  --color-welcome-text-soft: #5A534C;
+  --color-welcome-heading:   #2A4560;
+  --color-welcome-script:    #3D5A72;
+  --color-welcome-navy:      #1E3A5F;
+  --color-welcome-green:     #2F6B4F;
   /* ─────────────────────────────────────────────────────────── */
   --font-imperial-script: "Imperial Script", cursive;
+  --font-beautiful-malera: "Beautiful Malera", cursive;
+  --font-the-seasons: "The Seasons", serif;
+  --font-above-beyond: "Above the Beyond", cursive;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -186,6 +227,48 @@ html {
   font-family: var(--font-imperial-script), cursive;
   font-weight: 400;
   font-style: normal;
+}
+
+/* Beautiful Malera — elegant wedding script */
+.beautiful-malera {
+  font-family: var(--font-beautiful-malera), cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Sorts Mill Goudy — invitation body text */
+.font-goudy-italic {
+  font-family: "SortsMillGoudy", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Wedding invitation double-frame accent */
+.wedding-frame-inner {
+  pointer-events: none;
+  position: absolute;
+  inset: 0.5rem;
+  border-radius: inherit;
+  border: 1px solid color-mix(in srgb, var(--color-motif-deep) 18%, transparent);
+}
+
+@media (min-width: 640px) {
+  .wedding-frame-inner {
+    inset: 0.65rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .wedding-frame-inner {
+    inset: 0.85rem;
+  }
+}
+
+/* Layered welcome title — fluid lockup */
+.welcome-title-lockup {
+  overflow: visible;
+  padding-top: 0.25rem;
+  padding-bottom: 0.5rem;
 }
 
 /* Lavishly Yours font utility class */

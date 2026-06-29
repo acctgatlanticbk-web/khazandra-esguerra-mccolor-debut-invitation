@@ -2,41 +2,43 @@
 
 import { useState, useEffect, useMemo, type ReactNode } from "react"
 import { motion } from "motion/react"
+import localFont from "next/font/local"
 import { Instagram, Twitter, Facebook, Music2 } from "lucide-react"
 import { useSiteConfig } from "@/hooks/use-site-config"
 import { Cinzel } from "next/font/google"
 import Image from "next/image"
-import {
-  coastalLightBg,
-  coastalPalette,
-  displayScript,
-} from "@/lib/coastal-palette"
-
-const FOOTER_MONOGRAM_COLOR = "#94B8C8"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
+})
+
+const theSeasons = localFont({
+  src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  display: "swap",
+  variable: "--font-the-seasons",
+})
+
+const aboveTheBeyond = localFont({
+  src: "../../Font/above-the-beyond-script.otf",
+  display: "swap",
+  variable: "--font-above-beyond",
 })
 
 const CORNER_DECO_CLASS =
-  "block h-auto w-auto max-w-[120px] sm:max-w-[160px] md:max-w-[220px] lg:max-w-[260px]"
-
-const BLUE_SHELL_FILTER =
-  `brightness(0) saturate(100%) invert(58%) sepia(18%) saturate(612%) hue-rotate(152deg) brightness(95%) contrast(88%) drop-shadow(0 4px 14px color-mix(in srgb, ${coastalPalette.blueGray} 55%, transparent))`
+  "block h-auto w-auto max-w-[120px] sm:max-w-[180px] md:max-w-[260px] lg:max-w-[320px] xl:max-w-[380px]"
 
 const palette = {
-  body: coastalPalette.body,
-  heading: coastalPalette.deep,
-  label: coastalPalette.dustyRose,
-  accent: coastalPalette.title,
-  deep: coastalPalette.deep,
-  cream: coastalPalette.cream,
+  body: "var(--color-welcome-text)",
+  heading: "var(--color-welcome-navy)",
+  label: "var(--color-welcome-heading)",
+  accent: "var(--color-welcome-green)",
 } as const
 
-const bodyFont: React.CSSProperties = {
-  fontFamily: "'SortsMillGoudy', Georgia, serif",
-}
+const dividerLineStyle = {
+  background:
+    "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-motif-deep) 38%, transparent), transparent)",
+} as const
 
 const ct = {
   label: "text-[11px] sm:text-xs md:text-sm",
@@ -44,6 +46,24 @@ const ct = {
   bodyLg: "text-sm sm:text-base md:text-lg",
   title: "text-lg sm:text-xl md:text-2xl lg:text-3xl",
   cardTitle: "text-sm sm:text-base md:text-lg",
+} as const
+
+const cardStyle = {
+  background: "var(--color-welcome-bg)",
+  borderWidth: "1px",
+  borderStyle: "solid",
+  borderColor: "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+  boxShadow:
+    "0 8px 28px color-mix(in srgb, var(--color-motif-deep) 7%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)",
+} as const
+
+const socialLinkStyle = {
+  borderWidth: "1px",
+  borderStyle: "solid",
+  borderColor: "color-mix(in srgb, var(--color-motif-deep) 18%, transparent)",
+  backgroundColor: "var(--color-welcome-bg-soft)",
+  color: "var(--color-welcome-green)",
+  boxShadow: "0 4px 12px color-mix(in srgb, var(--color-motif-deep) 10%, transparent)",
 } as const
 
 const FOOTER_QUOTES = [
@@ -59,13 +79,28 @@ const toTitleCase = (str: string) =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ")
 
-const glassCardStyle = {
-  backgroundColor: `color-mix(in srgb, ${coastalPalette.cream} 38%, transparent)`,
-  borderWidth: "1px",
-  borderStyle: "solid",
-  borderColor: `color-mix(in srgb, white 72%, ${coastalPalette.blueGray})`,
-  boxShadow: `0 20px 48px color-mix(in srgb, ${coastalPalette.teal} 10%, transparent), 0 8px 24px color-mix(in srgb, ${coastalPalette.blueGray} 14%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.82)`,
-} as const
+function FooterCoupleNames({ groom, bride }: { groom: string; bride: string }) {
+  return (
+    <h2
+      className={`${cinzel.className} mx-auto whitespace-nowrap text-center text-[clamp(1.125rem,4vw,2rem)] font-semibold tracking-[0.12em] sm:tracking-[0.16em] md:tracking-[0.18em]`}
+      style={{ color: "var(--color-welcome-navy)" }}
+    >
+      {groom}
+      <span
+        className={`${aboveTheBeyond.className} mx-2 inline-block normal-case tracking-normal sm:mx-2.5`}
+        style={{
+          fontSize: "1.35em",
+          color: "var(--color-welcome-green)",
+          verticalAlign: "middle",
+        }}
+        aria-hidden
+      >
+        &
+      </span>
+      {bride}
+    </h2>
+  )
+}
 
 function FooterCard({
   children,
@@ -77,7 +112,7 @@ function FooterCard({
   return (
     <div
       className={`relative w-full min-w-0 rounded-xl sm:rounded-2xl backdrop-blur-xl sm:backdrop-blur-2xl p-4 sm:p-5 md:p-6 transition-all duration-300 hover:shadow-xl ${className}`}
-      style={glassCardStyle}
+      style={cardStyle}
     >
       <div
         className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-white/35 via-white/8 to-transparent"
@@ -103,7 +138,7 @@ function DetailRow({
       >
         {label}
       </p>
-      <p className={ct.body} style={{ ...bodyFont, color: palette.body }}>
+      <p className={`font-goudy-italic ${ct.body}`} style={{ color: palette.body }}>
         {value}
       </p>
     </div>
@@ -121,9 +156,9 @@ export function Footer() {
   const ceremonyAddress = siteConfig.ceremony.venue
   const receptionAddress = siteConfig.reception.venue
 
-  const brideNickname = siteConfig.couple.brideNickname
-  const groomNickname = siteConfig.couple.groomNickname
-  const coupleDisplayName = `${groomNickname} & ${brideNickname}`
+  const groomName = siteConfig.couple.groomNickname || siteConfig.couple.groom
+  const brideName = siteConfig.couple.brideNickname || siteConfig.couple.bride
+  const coupleDisplayName = `${groomName} & ${brideName}`
 
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0)
   const [displayedText, setDisplayedText] = useState("")
@@ -182,25 +217,42 @@ export function Footer() {
   )
 
   return (
-    <div className="relative w-full overflow-hidden" style={{ backgroundColor: coastalLightBg }}>
+    <div
+      className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative w-full overflow-hidden`}
+      style={{ background: "var(--color-welcome-bg)" }}
+    >
       <footer className="relative z-10 pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14">
-        {/* Shell corner decorations */}
-        <div className="pointer-events-none absolute left-0 top-0 z-[1]">
+        {/* Corner decorations */}
+        <div className="pointer-events-none absolute left-0 top-0 z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/decoration/top-left-shell-deco.png"
+            src="/decoration/decoration/left-top-decoration.png"
             alt=""
             className={CORNER_DECO_CLASS}
-            style={{ filter: BLUE_SHELL_FILTER }}
           />
         </div>
-        <div className="pointer-events-none absolute bottom-0 right-0 z-[1]">
+        <div className="pointer-events-none absolute right-0 top-0 z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/decoration/right-bottom-shell-deco.png"
+            src="/decoration/decoration/right-top-decoration.png"
             alt=""
             className={CORNER_DECO_CLASS}
-            style={{ filter: BLUE_SHELL_FILTER }}
+          />
+        </div>
+        <div className="pointer-events-none absolute bottom-0 left-0 z-10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/decoration/decoration/left-bottom-decoration%20(2).png"
+            alt=""
+            className={CORNER_DECO_CLASS}
+          />
+        </div>
+        <div className="pointer-events-none absolute bottom-0 right-0 z-10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/decoration/decoration/right-bottom-decoration%20(2).png"
+            alt=""
+            className={CORNER_DECO_CLASS}
           />
         </div>
 
@@ -224,37 +276,18 @@ export function Footer() {
             </div>
           </motion.div>
 
-          <div className="mt-4 sm:mt-5 md:mt-6 text-center max-w-md">
-            <h2
-              className="mx-auto whitespace-nowrap leading-[1.1]"
-              style={{
-                ...displayScript,
-                fontSize: "clamp(2rem, 6.5vw, 3.5rem)",
-                color: FOOTER_MONOGRAM_COLOR,
-                letterSpacing: "0.03em",
-                textShadow: `0 2px 12px color-mix(in srgb, ${FOOTER_MONOGRAM_COLOR} 45%, transparent)`,
-              }}
-            >
-              {coupleDisplayName}
-            </h2>
-            <p
-              className={`${ct.bodyLg} mt-2 sm:mt-3 italic`}
-              style={{
-                ...bodyFont,
-                color: FOOTER_MONOGRAM_COLOR,
-                letterSpacing: "0.04em",
-                textShadow: `0 1px 8px color-mix(in srgb, ${FOOTER_MONOGRAM_COLOR} 35%, transparent)`,
-              }}
+          <div className="mt-4 max-w-md text-center sm:mt-5 md:mt-6">
+            {/* <FooterCoupleNames groom={groomName} bride={brideName} /> */}
+            {/* <p
+              className="font-goudy-italic mt-2 text-[0.75rem] leading-[1.62] sm:mt-3 sm:text-[0.8125rem] md:text-[0.84375rem]"
+              style={{ color: "var(--color-welcome-text)" }}
             >
               {ceremonyDate}
-            </p>
+            </p> */}
           </div>
 
           <div className="flex items-center justify-center pt-3 sm:pt-4">
-            <span
-              className="h-px w-16 sm:w-24 md:w-32"
-              style={{ backgroundColor: `color-mix(in srgb, ${FOOTER_MONOGRAM_COLOR} 65%, white)` }}
-            />
+            <span className="h-px w-16 sm:w-24 md:w-32" style={dividerLineStyle} />
           </div>
         </div>
 
@@ -288,13 +321,13 @@ export function Footer() {
                   A Note From Us
                 </p>
                 <blockquote
-                  className={`${ct.bodyLg} italic leading-relaxed min-h-[4.5rem] sm:min-h-[5rem]`}
-                  style={{ ...bodyFont, color: palette.body }}
+                  className={`font-goudy-italic ${ct.bodyLg} min-h-[4.5rem] leading-relaxed sm:min-h-[5rem]`}
+                  style={{ color: palette.body }}
                 >
                   &ldquo;{displayedText}
                   <span
-                    className="inline-block w-0.5 h-4 sm:h-5 ml-1 animate-pulse align-middle"
-                    style={{ backgroundColor: coastalPalette.teal }}
+                    className="ml-1 inline-block h-4 w-0.5 animate-pulse align-middle sm:h-5"
+                    style={{ backgroundColor: "var(--color-welcome-green)" }}
                   />
                   &rdquo;
                 </blockquote>
@@ -320,7 +353,7 @@ export function Footer() {
                   className={`${cinzel.className} ${ct.cardTitle} font-semibold mb-3`}
                   style={{ color: palette.heading }}
                 >
-                  Ceremony
+                  Ceremony & Reception
                 </h4>
                 <div className="space-y-3">
                   <DetailRow label="Venue" value={toTitleCase(ceremonyVenue)} />
@@ -331,7 +364,7 @@ export function Footer() {
                 </div>
               </FooterCard>
 
-              <FooterCard>
+              {/* <FooterCard>
                 <h4
                   className={`${cinzel.className} ${ct.cardTitle} font-semibold mb-3`}
                   style={{ color: palette.heading }}
@@ -345,7 +378,7 @@ export function Footer() {
                   )}
                   <DetailRow label="Time" value={receptionTime} />
                 </div>
-              </FooterCard>
+              </FooterCard> */}
 
               <FooterCard>
                 <h4 className={`${cinzel.className} ${ct.cardTitle} font-semibold mb-3`} style={{ color: palette.heading }}>
@@ -353,7 +386,7 @@ export function Footer() {
                 </h4>
                 <div className="space-y-2">
                   <DetailRow label="Please respond by" value={siteConfig.details.rsvp.deadline} />
-                  <p className={`${ct.body} leading-relaxed`} style={{ ...bodyFont, color: palette.body, opacity: 0.9 }}>
+                  <p className={`font-goudy-italic ${ct.body} leading-relaxed opacity-90`} style={{ color: palette.body }}>
                     Please confirm your attendance by this date.
                   </p>
                 </div>
@@ -368,8 +401,8 @@ export function Footer() {
                   style={{ color: palette.heading }}
                 >
                   <span
-                    className="w-1.5 h-6 sm:h-7 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: coastalPalette.teal }}
+                    className="h-6 w-1.5 flex-shrink-0 rounded-full sm:h-7"
+                    style={{ backgroundColor: "var(--color-welcome-green)" }}
                   />
                   Follow Us
                 </h4>
@@ -387,15 +420,8 @@ export function Footer() {
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center h-10 w-10 sm:h-11 sm:w-11 rounded-full transition-all duration-200 hover:scale-110"
-                      style={{
-                        borderWidth: "1px",
-                        borderStyle: "solid",
-                        borderColor: `color-mix(in srgb, white 65%, ${coastalPalette.blueGray})`,
-                        backgroundColor: `color-mix(in srgb, ${coastalPalette.cream} 45%, transparent)`,
-                        color: coastalPalette.teal,
-                        boxShadow: `0 4px 12px color-mix(in srgb, ${coastalPalette.blueGray} 12%, transparent)`,
-                      }}
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 hover:scale-110 sm:h-11 sm:w-11"
+                      style={socialLinkStyle}
                       aria-label={label}
                     >
                       <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -416,8 +442,8 @@ export function Footer() {
                     <a
                       key={item.href}
                       href={item.href}
-                      className={`block ${ct.body} leading-relaxed transition-colors duration-200 hover:opacity-80`}
-                      style={{ ...bodyFont, color: palette.body }}
+                      className={`font-goudy-italic block ${ct.body} leading-relaxed transition-colors duration-200 hover:opacity-80`}
+                      style={{ color: palette.body }}
                     >
                       {item.label}
                     </a>
@@ -430,32 +456,37 @@ export function Footer() {
           {/* Bottom bar */}
           <motion.div
             className="pt-6 sm:pt-8 border-t"
-            style={{ borderColor: `color-mix(in srgb, ${coastalPalette.blueGray} 35%, white)` }}
+            style={{
+              borderColor: "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+            }}
             variants={fadeInUp}
           >
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
               <div className="text-center md:text-left min-w-0">
-                <p className={`${ct.body} leading-relaxed`} style={{ ...bodyFont, color: palette.body }}>
+                <p className={`font-goudy-italic ${ct.body} leading-relaxed`} style={{ color: palette.body }}>
                   © {year} {coupleDisplayName} — crafted with love, prayers, and gratitude.
                 </p>
-                <p className={`${ct.body} mt-1 leading-relaxed opacity-90`} style={{ ...bodyFont, color: palette.body }}>
+                <p
+                  className={`font-goudy-italic ${ct.body} mt-1 leading-relaxed opacity-90`}
+                  style={{ color: palette.body }}
+                >
                   This celebration site was designed to share our story and joy with you.
                 </p>
               </div>
-              <div className="text-center md:text-right space-y-1 min-w-0">
-                <p className={ct.body} style={{ ...bodyFont, color: palette.body, opacity: 0.9 }}>
+              <div className="min-w-0 space-y-1 text-center md:text-right">
+                <p className={`font-goudy-italic ${ct.body} opacity-90`} style={{ color: palette.body }}>
                   Developed by{" "}
                   <a
                     href="https://lance28-beep.github.io/portfolio-website/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline font-semibold transition-colors hover:opacity-80"
+                    className="font-semibold underline transition-colors hover:opacity-80"
                     style={{ color: palette.accent }}
                   >
                     Lance Valle
                   </a>
                 </p>
-                <p className={ct.body} style={{ ...bodyFont, color: palette.body, opacity: 0.9 }}>
+                <p className={`font-goudy-italic ${ct.body} opacity-90`} style={{ color: palette.body }}>
                   Want a website like this? Visit{" "}
                   <a
                     href="https://www.facebook.com/WeddingInvitationNaga"

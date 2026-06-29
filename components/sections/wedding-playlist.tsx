@@ -1,14 +1,11 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { Section } from "@/components/section"
 import { useSiteConfig } from "@/hooks/use-site-config"
 import { useAudio } from "@/contexts/audio-context"
 import { Cinzel } from "next/font/google"
-import {
-  coastalPalette,
-  displayScript,
-} from "@/lib/coastal-palette"
+import localFont from "next/font/local"
+import { Music2 } from "lucide-react"
 
 interface SpotifyPlaybackUpdate {
   playingURI: string
@@ -85,37 +82,104 @@ function loadSpotifyIframeApi(onReady: (api: SpotifyIframeApi) => void) {
 
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
 })
 
-const OUTSIDE_TEXT = coastalPalette.cream
-const OUTSIDE_TEXT_MUTED = "rgba(255, 252, 248, 0.88)"
-const OUTSIDE_LABEL = "rgba(255, 252, 248, 0.72)"
+const theSeasons = localFont({
+  src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  display: "swap",
+  variable: "--font-the-seasons",
+})
+
+const aboveTheBeyond = localFont({
+  src: "../../Font/above-the-beyond-script.otf",
+  display: "swap",
+  variable: "--font-above-beyond",
+})
+
+const OUTSIDE_TEXT = "#FFFFFF"
+const OUTSIDE_TEXT_MUTED = "rgba(255, 255, 255, 0.88)"
 const OUTSIDE_TITLE_SHADOW =
   "0 2px 6px rgba(0, 0, 0, 0.28), 0 0 18px rgba(0, 0, 0, 0.12)"
 
-const BUTTON_COLOR = "#FBCFC6"
+const palette = {
+  heading: "var(--color-welcome-navy)",
+} as const
 
-const bodyFont: React.CSSProperties = {
-  fontFamily: "'SortsMillGoudy', Georgia, serif",
-}
+const outsideDividerLineStyle = {
+  background:
+    "linear-gradient(to right, transparent, rgba(255, 255, 255, 0.55), transparent)",
+} as const
 
 const ct = {
-  label: "text-[11px] sm:text-xs md:text-sm",
-  body: "text-xs sm:text-sm md:text-base lg:text-lg",
-  btn: "text-xs sm:text-sm md:text-base",
+  body: "text-xs sm:text-sm md:text-base",
+  bodyLg: "text-sm sm:text-base md:text-lg",
+  btn: "text-[0.625rem] sm:text-[0.6875rem] md:text-xs",
 } as const
 
 const cardStyle = {
-  background: `linear-gradient(
-    155deg,
-    color-mix(in srgb, ${coastalPalette.peach} 88%, white) 0%,
-    color-mix(in srgb, ${coastalPalette.lavenderBlue} 92%, white) 50%,
-    color-mix(in srgb, ${coastalPalette.blueGray} 55%, white) 100%
-  )`,
-  borderColor: `color-mix(in srgb, ${coastalPalette.dustyRose} 38%, white)`,
-  boxShadow: `0 16px 48px color-mix(in srgb, ${coastalPalette.teal} 14%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.72)`,
+  background: "var(--color-welcome-bg)",
+  borderWidth: "1px",
+  borderStyle: "solid",
+  borderColor: "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+  boxShadow:
+    "0 8px 28px color-mix(in srgb, var(--color-motif-deep) 7%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)",
 } as const
+
+function OutsideDivider() {
+  return (
+    <div className="flex items-center justify-center gap-1.5">
+      <span className="h-px w-6 sm:w-10" style={outsideDividerLineStyle} />
+      <span className="h-0.5 w-0.5 rounded-full bg-white/50 sm:h-1 sm:w-1" aria-hidden />
+      <span
+        className="h-px w-6 sm:w-10"
+        style={{
+          background:
+            "linear-gradient(to left, transparent, rgba(255, 255, 255, 0.55), transparent)",
+        }}
+      />
+    </div>
+  )
+}
+
+function PlaylistTitle({ title, script }: { title: string; script: string }) {
+  return (
+    <h2
+      className="relative mx-auto w-full max-w-full text-center"
+      style={
+        {
+          "--title-size": "clamp(2.15rem, 11vw, 4.5rem)",
+          "--script-size": "clamp(1.1rem, 4.5vw, 2.25rem)",
+          "--script-overlap": "clamp(-0.65rem, -2.8vw, -1.5rem)",
+        } as React.CSSProperties
+      }
+    >
+      <span
+        className={`${theSeasons.className} block uppercase leading-[0.78] tracking-[0.08em] min-[400px]:tracking-[0.11em] sm:tracking-[0.15em] md:tracking-[0.18em]`}
+        style={{
+          fontSize: "var(--title-size)",
+          color: OUTSIDE_TEXT,
+          textShadow: OUTSIDE_TITLE_SHADOW,
+        }}
+      >
+        {title}
+      </span>
+      <span
+        aria-hidden
+        className={`${aboveTheBeyond.className} relative z-10 mx-auto block w-fit max-w-full px-1 leading-[0.88] sm:leading-[0.9]`}
+        style={{
+          marginTop: "var(--script-overlap)",
+          fontSize: "var(--script-size)",
+          color: OUTSIDE_TEXT_MUTED,
+          textShadow: OUTSIDE_TITLE_SHADOW,
+        }}
+      >
+        {script}
+      </span>
+      <span className="sr-only">{script}</span>
+    </h2>
+  )
+}
 
 export function WeddingPlaylist() {
   const siteConfig = useSiteConfig()
@@ -185,74 +249,86 @@ export function WeddingPlaylist() {
   }, [pauseMusic, resumeMusic, spotifyUri])
 
   return (
-    <Section
+    <section
       id="playlist"
-      className="relative bg-transparent pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14"
+      className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative z-10 bg-transparent pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14`}
     >
-      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 md:px-8">
-        {/* Header — on silk backdrop */}
-        <div className="text-center mb-6 sm:mb-8 md:mb-10">
+      <div className="relative z-20 mx-auto max-w-3xl px-4 sm:px-6 md:px-8">
+        {/* Header — outside container, white on silk */}
+        <div className="relative z-20 px-6 text-center sm:px-10 md:px-12">
+          <div className="mx-auto mb-5 sm:mb-6 md:mb-7">
+            <OutsideDivider />
+          </div>
+          <div className="mx-auto mt-2 sm:mt-3 md:mt-4">
+            <PlaylistTitle title={title} script={playlistName} />
+          </div>
           <p
-            className={`${cinzel.className} ${ct.label} uppercase tracking-[0.2em] sm:tracking-[0.24em] mb-2`}
-            style={{ color: OUTSIDE_LABEL }}
-          >
-            {playlistName}
-          </p>
-          <h2
-            className="mx-auto my-4 max-w-[16ch] leading-[1.08] sm:my-5 md:my-6 md:max-w-none"
-            style={{
-              ...displayScript,
-              fontSize: "clamp(2.35rem, 7.5vw, 4.25rem)",
-              color: OUTSIDE_TEXT,
-              letterSpacing: "0.02em",
-              textShadow: OUTSIDE_TITLE_SHADOW,
-            }}
-          >
-            {title}
-          </h2>
-          <p
-            className={`${ct.body} max-w-lg mx-auto leading-relaxed px-2`}
-            style={{ ...bodyFont, color: OUTSIDE_TEXT_MUTED }}
+            className={`font-goudy-italic ${ct.bodyLg} mx-auto mt-4 max-w-lg leading-relaxed px-2 sm:mt-5 md:mt-6`}
+            style={{ color: OUTSIDE_TEXT_MUTED }}
           >
             {subtitle}
           </p>
-          <div className="flex items-center justify-center pt-2 sm:pt-3">
+          <div className="flex items-center justify-center pt-3 sm:pt-4">
             <span className="h-px w-16 sm:w-24 md:w-32 bg-white/50" />
           </div>
         </div>
 
         {/* Playlist card */}
         <div
-          className="relative overflow-hidden rounded-xl sm:rounded-2xl border backdrop-blur-md px-4 sm:px-5 md:px-8 lg:px-10 py-6 sm:py-8 md:py-10"
+          className="relative mt-6 overflow-hidden rounded-xl border backdrop-blur-xl sm:mt-8 sm:rounded-2xl sm:backdrop-blur-2xl md:mt-10"
           style={cardStyle}
         >
           <div
-            ref={embedContainerRef}
-            title={`${playlistName} — Spotify playlist`}
-            className="w-full min-h-[232px] md:min-h-[352px] rounded-xl overflow-hidden [&_iframe]:border-0"
-            style={{
-              borderColor: `color-mix(in srgb, ${coastalPalette.blueGray} 35%, white)`,
-            }}
+            className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-white/35 via-white/8 to-transparent"
+            aria-hidden
           />
 
-          <div className="flex justify-center mt-5 sm:mt-6">
-            <a
-              href={spotifyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${cinzel.className} ${ct.btn} inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 rounded-full uppercase tracking-[0.12em] font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] border`}
-              style={{
-                backgroundColor: BUTTON_COLOR,
-                borderColor: coastalPalette.dustyRose,
-                color: coastalPalette.deep,
-                boxShadow: `0 6px 20px color-mix(in srgb, ${BUTTON_COLOR} 45%, transparent)`,
-              }}
+          <div className="relative z-20 px-4 py-6 sm:px-6 sm:py-8 md:px-8 md:py-10">
+            <p
+              className={`${cinzel.className} mb-4 text-center text-[0.625rem] font-semibold uppercase tracking-[0.2em] sm:mb-5 sm:text-[0.6875rem] sm:tracking-[0.24em] md:text-xs`}
+              style={{ color: palette.heading }}
             >
-              Open in Spotify
-            </a>
+              {playlistName}
+            </p>
+
+            <div
+              ref={embedContainerRef}
+              title={`${playlistName} — Spotify playlist`}
+              className="w-full min-h-[232px] overflow-hidden rounded-xl md:min-h-[352px] [&_iframe]:border-0"
+            />
+
+            <div className="mt-5 flex justify-center sm:mt-6">
+              <a
+                href={spotifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${cinzel.className} group relative inline-flex items-center justify-center gap-2 rounded-sm border px-6 py-2.5 font-semibold uppercase tracking-[0.2em] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:px-8 sm:py-3 sm:tracking-[0.24em] md:px-10 md:py-3.5 md:tracking-[0.28em] ${ct.btn}`}
+                style={{
+                  backgroundColor: "var(--color-welcome-green)",
+                  borderColor: "color-mix(in srgb, var(--color-welcome-navy) 35%, transparent)",
+                  color: "var(--color-welcome-bg)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "var(--color-welcome-navy)"
+                  e.currentTarget.style.borderColor = "var(--color-welcome-green)"
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "var(--color-welcome-green)"
+                  e.currentTarget.style.borderColor =
+                    "color-mix(in srgb, var(--color-welcome-navy) 35%, transparent)"
+                }}
+              >
+                <Music2 className="relative z-10 h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="relative z-10">Open in Spotify</span>
+                <div
+                  className="absolute inset-0 -z-0 rounded-sm opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-25"
+                  style={{ backgroundColor: "var(--color-motif-deep)" }}
+                />
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </Section>
+    </section>
   )
 }

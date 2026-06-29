@@ -1,51 +1,128 @@
 "use client"
 
+import localFont from "next/font/local"
+import { motion } from "motion/react"
 import { useSiteConfig } from "@/hooks/use-site-config"
-import { Cormorant_Garamond, Cinzel } from "next/font/google"
-
-// Coastal sunset palette — peach, dusty rose, muted teal, blue-gray, lavender-blue
-const welcomePalette = {
-  peach: "#F5D5C8",
-  lavenderBlue: "#E8EEF2",
-  blueGray: "#B8C9D0",
-  dustyRose: "#C4A4A0",
-  teal: "#6B8F91",
-  body: "#4A5F65",
-  title: "#6A8F93",
-  deep: "#5A7478",
-} as const
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-})
+import { Cinzel } from "next/font/google"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "600", "700"],
 })
 
-const CORNER_DECO_CLASS =
-  "block h-auto w-auto max-w-[120px] sm:max-w-[160px] md:max-w-[220px] lg:max-w-[260px]"
+const theSeasons = localFont({
+  src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  display: "swap",
+  variable: "--font-the-seasons",
+})
 
-const WHITE_DECO_FILTER =
-  "brightness(0) saturate(100%) invert(100%) drop-shadow(0 4px 14px rgba(255, 255, 255, 0.35))"
+const aboveTheBeyond = localFont({
+  src: "../../Font/above-the-beyond-script.otf",
+  display: "swap",
+  variable: "--font-above-beyond",
+})
 
-const displayScript = {
-  fontFamily: "'Brightwall', cursive",
-  fontWeight: 400,
-} as const
+function OrnamentalDivider({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className={`flex items-center justify-center ${compact ? "gap-1.5" : "gap-2"}`}>
+      <span
+        className={`h-px ${compact ? "w-6 sm:w-10" : "w-8 sm:w-12"}`}
+        style={{
+          background:
+            "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-motif-deep) 38%, transparent))",
+        }}
+      />
+      <span className="h-0.5 w-0.5 rounded-full bg-motif-deep/45 sm:h-1 sm:w-1" aria-hidden />
+      <span
+        className={`h-px ${compact ? "w-6 sm:w-10" : "w-8 sm:w-12"}`}
+        style={{
+          background:
+            "linear-gradient(to left, transparent, color-mix(in srgb, var(--color-motif-deep) 38%, transparent))",
+        }}
+      />
+    </div>
+  )
+}
 
-const cardStyle = {
-  background: `linear-gradient(
-    155deg,
-    color-mix(in srgb, ${welcomePalette.peach} 88%, white) 0%,
-    color-mix(in srgb, ${welcomePalette.lavenderBlue} 92%, white) 50%,
-    color-mix(in srgb, ${welcomePalette.blueGray} 55%, white) 100%
-  )`,
-  borderColor: `color-mix(in srgb, ${welcomePalette.dustyRose} 38%, white)`,
-  boxShadow: `0 16px 48px color-mix(in srgb, ${welcomePalette.teal} 14%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.72)`,
-} as const
+function CoupleLabel({ groom, bride }: { groom: string; bride: string }) {
+  const lineStyle = {
+    background:
+      "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-welcome-navy) 35%, transparent))",
+  }
+
+  return (
+    <div className="flex items-center justify-center gap-2.5 pt-1 sm:gap-3.5 sm:pt-1.5">
+      <span className="h-px w-5 sm:w-7 md:w-9" style={lineStyle} aria-hidden />
+      <p
+        className={`${cinzel.className} shrink-0 py-0.5 text-[0.525rem] font-semibold uppercase leading-normal tracking-[0.34em] min-[400px]:text-[0.55rem] min-[400px]:tracking-[0.38em] sm:text-[0.575rem] sm:tracking-[0.44em]`}
+        style={{ color: "var(--color-welcome-navy)" }}
+      >
+        {groom}
+        <span
+          className={`${aboveTheBeyond.className} mx-1.5 inline-block normal-case tracking-normal sm:mx-2`}
+          style={{
+            fontSize: "1.35em",
+            color: "var(--color-welcome-green)",
+            verticalAlign: "middle",
+          }}
+          aria-hidden
+        >
+          &
+        </span>
+        {bride}
+      </p>
+      <span
+        className="h-px w-5 sm:w-7 md:w-9"
+        style={{
+          background:
+            "linear-gradient(to left, transparent, color-mix(in srgb, var(--color-welcome-navy) 35%, transparent))",
+        }}
+        aria-hidden
+      />
+    </div>
+  )
+}
+
+function LayeredWelcomeTitle() {
+  return (
+    <h2
+      className="welcome-title-lockup relative mx-auto w-full max-w-full text-center"
+      style={
+        {
+          "--welcome-size": "clamp(2.15rem, 11vw, 6.5rem)",
+          "--script-size": "clamp(1.2rem, 5vw, 3rem)",
+          "--script-overlap": "clamp(-0.9rem, -3.8vw, -2.2rem)",
+        } as React.CSSProperties
+      }
+    >
+      <span
+        className={`${theSeasons.className} block uppercase leading-[0.78] tracking-[0.08em] min-[400px]:tracking-[0.11em] sm:tracking-[0.15em] md:tracking-[0.18em]`}
+        style={{
+          fontSize: "var(--welcome-size)",
+          color: "var(--color-welcome-navy)",
+        }}
+      >
+        Welcome
+      </span>
+
+      <span
+        aria-hidden
+        className={`${aboveTheBeyond.className} relative z-10 mx-auto block w-fit max-w-full px-1 leading-[0.88] sm:leading-[0.9]`}
+        style={{
+          marginTop: "var(--script-overlap)",
+          fontSize: "var(--script-size)",
+          color: "var(--color-welcome-green)",
+          textShadow:
+            "0 1px 0 color-mix(in srgb, var(--color-welcome-bg) 95%, white), 0 0 10px color-mix(in srgb, var(--color-welcome-bg) 65%, white)",
+        }}
+      >
+        to our love story
+      </span>
+
+      <span className="sr-only"> to our love story</span>
+    </h2>
+  )
+}
 
 export function Welcome() {
   const siteConfig = useSiteConfig()
@@ -55,167 +132,144 @@ export function Welcome() {
   return (
     <section
       id="welcome"
-      className="relative overflow-hidden pt-12 pb-4 sm:pt-16 sm:pb-6 md:pt-20 md:pb-8"
+      className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative px-3 py-5 sm:px-5 sm:py-7 md:px-6 md:py-9`}
     >
-      {/* Shell corner decorations — outside card container */}
-      <div className="pointer-events-none absolute left-0 top-0 z-[1]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/decoration/top-left-shell-deco.png"
-          alt=""
-          className={CORNER_DECO_CLASS}
-          style={{ filter: WHITE_DECO_FILTER }}
-        />
-      </div>
-
-      <div className="pointer-events-none absolute bottom-0 right-0 z-[1]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/decoration/right-bottom-shell-deco.png"
-          alt=""
-          className={CORNER_DECO_CLASS}
-          style={{ filter: WHITE_DECO_FILTER }}
-        />
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 md:px-8">
-        <div
-          className="relative overflow-hidden rounded-2xl border px-4 py-6 sm:rounded-3xl sm:px-5 sm:py-8 md:rounded-[2rem] md:px-8 md:py-10 lg:px-10 lg:py-12"
-          style={cardStyle}
+      <div className="relative mx-auto w-full max-w-xl sm:max-w-2xl">
+        <motion.article
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.65, ease: [0.22, 0.61, 0.36, 1] }}
+          className="relative min-w-0 overflow-visible rounded-lg border px-4 pt-6 pb-10 sm:rounded-xl sm:px-7 sm:pt-7 sm:pb-12 md:rounded-2xl md:px-8 md:pt-8 md:pb-14"
+          style={{
+            background: "var(--color-welcome-bg)",
+            borderColor: "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+            boxShadow:
+              "0 8px 28px color-mix(in srgb, var(--color-motif-deep) 7%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)",
+          }}
         >
-          <div className="relative space-y-4 text-center sm:space-y-6 md:space-y-7 lg:space-y-8">
-            <div className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
-              <p
-                className={`${cormorant.className} text-xs uppercase tracking-[0.24em] sm:text-sm sm:tracking-[0.28em] md:text-base`}
-                style={{ color: welcomePalette.dustyRose }}
-              >
-                {siteConfig.couple.groomNickname} &amp; {siteConfig.couple.brideNickname}
-              </p>
-              <h2
-                className="mx-auto mt-4 max-w-[18ch] leading-[1.08] sm:mt-5 md:mt-6 md:max-w-none"
-                style={{
-                  ...displayScript,
-                  fontSize: "clamp(2.35rem, 7.5vw, 4.25rem)",
-                  color: welcomePalette.title,
-                  letterSpacing: "0.02em",
-                  textShadow:
-                    "0 2px 4px rgba(255, 255, 255, 0.85), 0 0 16px rgba(184, 201, 208, 0.45)",
-                }}
-              >
-                Welcome to our forever
-              </h2>
+          <div className="wedding-frame-inner hidden min-[400px]:block" aria-hidden />
 
-              <div className="space-y-0.5 sm:space-y-1">
-                <p
-                  className={`${cormorant.className} text-sm italic leading-relaxed sm:text-base md:text-lg`}
-                  style={{ color: welcomePalette.body }}
-                >
-                  &quot;I have found the one whom my soul loves.&quot;
-                </p>
-                <p
-                  className={`${cormorant.className} text-sm italic leading-relaxed sm:text-base md:text-lg`}
-                  style={{ color: welcomePalette.teal }}
-                >
-                  Song of Solomon 3:4
-                </p>
-              </div>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-5 top-0 h-px sm:inset-x-8"
+            style={{
+              background:
+                "linear-gradient(to right, transparent, var(--color-motif-yellow), transparent)",
+            }}
+          />
 
-              <div className="flex items-center justify-center gap-2 pt-1">
-                <span
-                  className="h-px w-10 sm:w-16 md:w-20"
-                  style={{ backgroundColor: `color-mix(in srgb, ${welcomePalette.blueGray} 70%, white)` }}
-                />
-                <span
-                  className="h-1.5 w-1.5 rounded-full"
-                  style={{ backgroundColor: welcomePalette.dustyRose }}
-                />
-                <span
-                  className="h-px w-10 sm:w-16 md:w-20"
-                  style={{ backgroundColor: `color-mix(in srgb, ${welcomePalette.blueGray} 70%, white)` }}
-                />
-              </div>
+          {/* Header */}
+          <header className="relative overflow-visible space-y-3 px-2 pt-4 pb-6 sm:space-y-3.5 sm:px-3 sm:pt-5 sm:pb-7 md:space-y-4 md:pt-6 md:pb-8">
+            <CoupleLabel groom={groomName} bride={brideName} />
+            <LayeredWelcomeTitle />
+            <div className="pt-2 sm:pt-2.5">
+              <OrnamentalDivider compact />
             </div>
+          </header>
 
+          {/* Content */}
+          <div className="relative mx-4 space-y-5 text-center sm:mx-6 sm:space-y-6 md:mx-7 md:space-y-7">
+            {/* Scripture */}
+            <figure
+              className="rounded-md border px-4 py-3.5 sm:rounded-lg sm:px-5 sm:py-4"
+              style={{
+                background: "var(--color-welcome-bg-soft)",
+                borderColor: "color-mix(in srgb, var(--color-motif-deep) 10%, transparent)",
+              }}
+            >
+              <blockquote>
+                <p
+                  className="font-goudy-italic text-[0.75rem] leading-snug sm:text-[0.8125rem] md:text-[0.84375rem]"
+                  style={{ color: "var(--color-welcome-text)" }}
+                >
+                  &ldquo;He has made everything beautiful in its time.&rdquo;
+                </p>
+                <figcaption className="mt-2 sm:mt-2.5">
+                  <cite
+                    className={`${cinzel.className} text-[0.5rem] not-italic uppercase tracking-[0.2em] sm:text-[0.525rem] sm:tracking-[0.24em]`}
+                    style={{ color: "var(--color-welcome-heading)" }}
+                  >
+                    Ecclesiastes 3:11
+                  </cite>
+                </figcaption>
+              </blockquote>
+            </figure>
+
+            {/* Body */}
             <div
-              className={`${cormorant.className} space-y-3 text-sm leading-relaxed sm:space-y-4 sm:text-base sm:leading-7 md:space-y-5 md:text-lg md:leading-8`}
-              style={{ color: welcomePalette.body }}
+              className="font-goudy-italic space-y-3 px-1 text-center text-[0.75rem] leading-[1.62] sm:space-y-3.5 sm:px-2 sm:text-[0.8125rem] sm:leading-[1.65] md:space-y-4 md:text-[0.84375rem]"
+              style={{ color: "var(--color-welcome-text)" }}
             >
               <p>
-                Our love is a blessing we hold close to our hearts, and we are deeply grateful to God
-                for gently guiding our story and bringing our lives together in such a beautiful way.
-                With hearts full of joy and thanksgiving, we are so happy to share this special moment
-                of our journey with you. Your love, prayers, and support have meant so much to us,
-                and it would mean the world to celebrate this meaningful day surrounded by the people
-                who have been part of our lives and our story.
+                Dear family and friends, we are overjoyed to begin this new chapter together and
+                grateful to God for every step that led us here. What began as a simple story has
+                grown into a love we cherish deeply — and we cannot imagine celebrating without you.
               </p>
               <p>
-                As you prepare to celebrate with us, please feel free to browse through the important
-                information and helpful reminders. Everything you need to know for the day is here.
-                Your presence and shared joy will truly make this celebration even more special for us.
+                This invitation holds everything you may need for our wedding day: the schedule,
+                venue details, and a few gentle reminders along the way. Whether near or far, your
+                presence, prayers, and warm wishes will mean more to us than words can say.
               </p>
+              <p>
+                Thank you for being part of our journey. We look forward to sharing this beautiful
+                day with the people who have shaped our lives and our hearts.
+              </p>
+            </div>
 
-              <div className="space-y-5 pt-3 sm:space-y-6 sm:pt-4 md:space-y-7 md:pt-5">
-                <div className="flex items-center justify-center gap-2">
-                  <span
-                    className="h-px w-10 sm:w-16 md:w-20"
-                    style={{ backgroundColor: `color-mix(in srgb, ${welcomePalette.blueGray} 70%, white)` }}
-                  />
-                  <span
-                    className="h-1.5 w-1.5 rounded-full"
-                    style={{ backgroundColor: welcomePalette.dustyRose }}
-                  />
-                  <span
-                    className="h-px w-10 sm:w-16 md:w-20"
-                    style={{ backgroundColor: `color-mix(in srgb, ${welcomePalette.blueGray} 70%, white)` }}
-                  />
-                </div>
+            {/* Bottom */}
+            <div className="space-y-5 pt-1 sm:space-y-6 sm:pt-2 md:space-y-7">
+              {/* <OrnamentalDivider compact /> */}
 
-                <div
-                  className="mx-auto max-w-md rounded-xl px-4 py-4 sm:rounded-2xl sm:px-6 sm:py-5"
-                  style={{
-                    border: `1px solid color-mix(in srgb, ${welcomePalette.blueGray} 55%, white)`,
-                    backgroundColor: "rgba(255, 255, 255, 0.62)",
-                  }}
-                >
+              {/* Hashtag */}
+              <aside
+                className="rounded-md border px-4 py-3.5 sm:rounded-lg sm:px-5 sm:py-4"
+                style={{
+                  background: "var(--color-welcome-bg-soft)",
+                  borderColor: "color-mix(in srgb, var(--color-motif-deep) 10%, transparent)",
+                }}
+              >
+                <div className="flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:justify-center sm:gap-2.5">
                   <p
-                    className={`${cormorant.className} mb-2 text-xs uppercase tracking-[0.22em] sm:mb-2.5 sm:text-sm sm:tracking-[0.26em]`}
-                    style={{ color: welcomePalette.teal }}
+                    className={`${cinzel.className} shrink-0 text-[0.5rem] font-semibold uppercase tracking-[0.18em] sm:text-[0.525rem] sm:tracking-[0.22em]`}
+                    style={{ color: "var(--color-welcome-heading)" }}
                   >
                     Share in our joy
                   </p>
+                  <span className="hidden text-motif-deep/30 sm:inline" aria-hidden>
+                    ·
+                  </span>
                   <p
-                    className="mb-3 text-sm leading-relaxed sm:mb-3.5 sm:text-base md:text-lg"
-                    style={{ color: welcomePalette.body }}
-                  >
-                    As you celebrate with us, please use our official hashtag when posting your photos
-                    and memories.
-                  </p>
-                  <p
-                    className={`${cormorant.className} text-base tracking-[0.06em] sm:text-lg sm:tracking-[0.08em] md:text-xl`}
-                    style={{ color: welcomePalette.deep }}
+                    className="font-goudy-italic text-[0.75rem] leading-snug sm:text-[0.8125rem]"
+                    style={{ color: "var(--color-welcome-navy)" }}
                   >
                     {siteConfig.snapShare.hashtag.join(" ")}
                   </p>
                 </div>
+              </aside>
 
-                <div className="space-y-1.5 pt-1 sm:space-y-2">
-                  <p
-                    className={`${cormorant.className} text-sm italic sm:text-base md:text-lg`}
-                    style={{ color: welcomePalette.teal }}
-                  >
-                    With all our love,
-                  </p>
-                  <p
-                    className={`${cinzel.className} text-xl tracking-[0.1em] sm:text-2xl sm:tracking-[0.14em] md:text-3xl`}
-                    style={{ color: welcomePalette.deep }}
-                  >
-                    {groomName} &amp; {brideName}
-                  </p>
-                </div>
-              </div>
+              {/* Sign-off */}
+              <footer className="space-y-2 px-1 pt-4 pb-2 sm:space-y-2.5 sm:px-2 sm:pt-5 sm:pb-3 md:pt-6 md:pb-4">
+                <p
+                  className={`${aboveTheBeyond.className} text-[1.3rem] leading-none min-[400px]:text-[1.45rem] sm:text-[1.6rem] md:text-[1.8rem]`}
+                  style={{
+                    color: "var(--color-welcome-green)",
+                    textShadow:
+                      "0 1px 0 color-mix(in srgb, var(--color-welcome-bg) 90%, white)",
+                  }}
+                >
+                  With all our love,
+                </p>
+                <p
+                  className={`${cinzel.className} mb-3 text-[0.6875rem] font-semibold tracking-[0.12em] sm:mb-4 sm:text-xs sm:tracking-[0.16em] md:mb-5 md:text-sm md:tracking-[0.18em]`}
+                  style={{ color: "var(--color-welcome-navy)" }}
+                >
+                  {groomName} &amp; {brideName}
+                </p>
+              </footer>
             </div>
           </div>
-        </div>
+        </motion.article>
       </div>
     </section>
   )

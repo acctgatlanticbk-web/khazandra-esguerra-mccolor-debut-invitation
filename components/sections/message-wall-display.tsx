@@ -4,20 +4,21 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useState, useEffect } from "react"
 import { Cinzel } from "next/font/google"
-import { coastalPalette } from "@/lib/coastal-palette"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
 })
 
-const BUTTON_COLOR = "#FBCFC6"
-const OUTSIDE_TEXT = coastalPalette.cream
-const OUTSIDE_TEXT_MUTED = "rgba(255, 252, 248, 0.88)"
+const OUTSIDE_TEXT = "#FFFFFF"
+const OUTSIDE_TEXT_MUTED = "rgba(255, 255, 255, 0.88)"
 
-const bodyFont: React.CSSProperties = {
-  fontFamily: "'SortsMillGoudy', Georgia, 'Times New Roman', serif",
-}
+const palette = {
+  body: "var(--color-welcome-text)",
+  heading: "var(--color-welcome-navy)",
+  label: "var(--color-welcome-heading)",
+  accent: "var(--color-welcome-green)",
+} as const
 
 const ct = {
   name: "text-xs sm:text-sm md:text-base",
@@ -29,14 +30,15 @@ const ct = {
 } as const
 
 const messageCardStyle = {
-  background: `linear-gradient(
-    155deg,
-    color-mix(in srgb, white 88%, ${coastalPalette.lavenderBlue}) 0%,
-    color-mix(in srgb, white 92%, ${coastalPalette.peach}) 100%
-  )`,
-  borderColor: `color-mix(in srgb, ${coastalPalette.dustyRose} 35%, white)`,
-  boxShadow: `0 4px 18px color-mix(in srgb, ${coastalPalette.teal} 10%, transparent)`,
+  background: "var(--color-welcome-bg)",
+  borderWidth: "1px",
+  borderStyle: "solid",
+  borderColor: "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+  boxShadow:
+    "0 8px 28px color-mix(in srgb, var(--color-motif-deep) 7%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)",
 } as const
+
+const skeletonBg = "color-mix(in srgb, var(--color-motif-deep) 18%, white)"
 
 interface Message {
   timestamp: string
@@ -61,43 +63,26 @@ export default function MessageWallDisplay({ messages, loading }: MessageWallDis
         setIsAnimating(false)
       }, 100)
       return () => clearTimeout(timer)
-    } else {
-      setVisibleMessages([])
     }
+    setVisibleMessages([])
   }, [messages])
 
   if (loading) {
     return (
       <div className="space-y-2 sm:space-y-3 md:space-y-4">
         {[1, 2, 3].map((i) => (
-          <Card
-            key={i}
-            className="rounded-xl sm:rounded-2xl border"
-            style={messageCardStyle}
-          >
+          <Card key={i} className="rounded-xl border sm:rounded-2xl" style={messageCardStyle}>
             <CardContent className="p-3 sm:p-4 md:p-5">
-              <div className="flex justify-between items-start mb-3">
+              <div className="mb-3 flex items-start justify-between">
                 <div className="flex items-center space-x-3">
-                  <Skeleton
-                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full"
-                    style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.blueGray} 45%, white)` }}
-                  />
+                  <Skeleton className="h-8 w-8 rounded-full sm:h-9 sm:w-9" style={{ backgroundColor: skeletonBg }} />
                   <div className="space-y-2">
-                    <Skeleton
-                      className="h-3 w-24 sm:w-32"
-                      style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.blueGray} 40%, white)` }}
-                    />
-                    <Skeleton
-                      className="h-2.5 w-20"
-                      style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.blueGray} 30%, white)` }}
-                    />
+                    <Skeleton className="h-3 w-24 sm:w-32" style={{ backgroundColor: skeletonBg }} />
+                    <Skeleton className="h-2.5 w-20" style={{ backgroundColor: skeletonBg }} />
                   </div>
                 </div>
               </div>
-              <Skeleton
-                className="h-14 sm:h-16 w-full rounded-lg"
-                style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.blueGray} 25%, white)` }}
-              />
+              <Skeleton className="h-14 w-full rounded-lg sm:h-16" style={{ backgroundColor: skeletonBg }} />
             </CardContent>
           </Card>
         ))}
@@ -107,27 +92,26 @@ export default function MessageWallDisplay({ messages, loading }: MessageWallDis
 
   if (messages.length === 0) {
     return (
-      <div className="text-center py-8 sm:py-12 md:py-16 px-4">
+      <div className="px-4 py-8 text-center sm:py-12 md:py-16">
         <h3
-          className={`${cinzel.className} ${ct.emptyTitle} font-semibold mb-2 sm:mb-3`}
+          className={`${cinzel.className} ${ct.emptyTitle} mb-2 font-semibold sm:mb-3`}
           style={{ color: OUTSIDE_TEXT }}
         >
           No messages yet
         </h3>
         <p
-          className={`${ct.emptyBody} max-w-md mx-auto leading-relaxed mb-5 sm:mb-6`}
-          style={{ ...bodyFont, color: OUTSIDE_TEXT_MUTED }}
+          className={`font-goudy-italic ${ct.emptyBody} mx-auto mb-5 max-w-md leading-relaxed sm:mb-6`}
+          style={{ color: OUTSIDE_TEXT_MUTED }}
         >
           Be the first to leave a note for the happy couple.
         </p>
         <div className="flex justify-center">
           <span
-            className={`${ct.badge} rounded-full border px-4 py-2`}
+            className={`font-goudy-italic ${ct.badge} rounded-sm border px-4 py-2`}
             style={{
-              ...bodyFont,
-              color: coastalPalette.deep,
-              backgroundColor: `color-mix(in srgb, ${BUTTON_COLOR} 65%, white)`,
-              borderColor: `color-mix(in srgb, ${coastalPalette.dustyRose} 45%, white)`,
+              color: palette.heading,
+              backgroundColor: "var(--color-welcome-bg-soft)",
+              borderColor: "color-mix(in srgb, var(--color-motif-deep) 18%, transparent)",
             }}
           >
             Your message will appear here
@@ -142,8 +126,8 @@ export default function MessageWallDisplay({ messages, loading }: MessageWallDis
       {visibleMessages.map((msg, index) => (
         <Card
           key={index}
-          className={`relative overflow-hidden border transition-all duration-500 group transform rounded-xl sm:rounded-2xl hover:scale-[1.01] ${
-            isAnimating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+          className={`group relative transform overflow-hidden rounded-xl border transition-all duration-500 hover:scale-[1.01] sm:rounded-2xl ${
+            isAnimating ? "translate-y-4 opacity-0" : "translate-y-0 opacity-100"
           }`}
           style={{
             ...messageCardStyle,
@@ -151,29 +135,30 @@ export default function MessageWallDisplay({ messages, loading }: MessageWallDis
             animation: isAnimating ? "none" : "fadeInUp 0.6s ease-out forwards",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = `0 8px 26px color-mix(in srgb, ${coastalPalette.teal} 16%, transparent)`
+            e.currentTarget.style.boxShadow =
+              "0 12px 32px color-mix(in srgb, var(--color-motif-deep) 12%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)"
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = messageCardStyle.boxShadow
+            e.currentTarget.style.boxShadow = messageCardStyle.boxShadow as string
           }}
         >
           <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-            style={{ background: `linear-gradient(to bottom right, color-mix(in srgb, ${coastalPalette.teal} 6%, transparent), transparent)` }}
+            className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-br from-white/35 via-white/8 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            aria-hidden
           />
           <div
-            className="absolute top-0 left-0 w-full h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
-            style={{ backgroundColor: coastalPalette.teal }}
+            className="absolute left-0 top-0 h-0.5 w-full origin-left scale-x-0 transform transition-transform duration-500 group-hover:scale-x-100"
+            style={{ backgroundColor: palette.accent }}
           />
 
           <CardContent className="relative p-3 sm:p-4 md:p-5">
-            <div className="flex justify-between items-start mb-2 sm:mb-3">
-              <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+            <div className="mb-2 flex items-start justify-between sm:mb-3">
+              <div className="flex min-w-0 flex-1 items-center space-x-2 sm:space-x-3">
                 <div
-                  className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 shrink-0 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-md ring-2 ring-white"
-                  style={{ backgroundColor: coastalPalette.dustyRose }}
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full shadow-md ring-2 ring-white transition-transform duration-300 group-hover:scale-110 sm:h-9 sm:w-9 md:h-10 md:w-10"
+                  style={{ backgroundColor: palette.accent }}
                 >
-                  <span className={`${cinzel.className} text-white text-[10px] sm:text-xs font-semibold`}>
+                  <span className={`${cinzel.className} text-[10px] font-semibold text-white sm:text-xs`}>
                     {msg.name
                       .split(" ")
                       .map((n) => n[0])
@@ -184,12 +169,12 @@ export default function MessageWallDisplay({ messages, loading }: MessageWallDis
                 </div>
                 <div className="min-w-0 flex-1">
                   <h4
-                    className={`${cinzel.className} ${ct.name} font-semibold truncate`}
-                    style={{ color: coastalPalette.deep }}
+                    className={`${cinzel.className} ${ct.name} truncate font-semibold`}
+                    style={{ color: palette.heading }}
                   >
                     {msg.name}
                   </h4>
-                  <span className={ct.date} style={{ color: coastalPalette.teal }}>
+                  <span className={ct.date} style={{ color: palette.label }}>
                     {new Date(msg.timestamp).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",
@@ -202,16 +187,16 @@ export default function MessageWallDisplay({ messages, loading }: MessageWallDis
               </div>
             </div>
 
-            <div className="relative pl-5 sm:pl-6 pr-2 sm:pr-4 py-1 sm:py-2">
+            <div className="relative py-1 pl-5 pr-2 sm:py-2 sm:pl-6 sm:pr-4">
               <span
-                className="absolute left-0 top-0 text-2xl sm:text-3xl leading-none select-none"
-                style={{ color: coastalPalette.dustyRose, opacity: 0.45, fontFamily: bodyFont.fontFamily }}
+                className="font-goudy-italic absolute left-0 top-0 select-none text-2xl leading-none sm:text-3xl"
+                style={{ color: palette.accent, opacity: 0.45 }}
               >
                 &ldquo;
               </span>
               <p
-                className={`${ct.message} leading-relaxed italic relative z-10`}
-                style={{ ...bodyFont, color: coastalPalette.body }}
+                className={`font-goudy-italic ${ct.message} relative z-10 leading-relaxed italic`}
+                style={{ color: palette.body }}
               >
                 {msg.message}
               </p>

@@ -2,20 +2,139 @@
 
 import React from "react"
 import { useState, useEffect, useMemo, useRef } from "react"
+import localFont from "next/font/local"
 import { entourage as staticEntourage, principalSponsors as staticSponsors } from "@/content/site"
 import { useSiteConfig } from "@/hooks/use-site-config"
 import { Cinzel } from "next/font/google"
-import {
-  coastalLightBg,
-  coastalPalette,
-  coastalTitleShadow,
-  displayScript,
-} from "@/lib/coastal-palette"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
 })
+
+const theSeasons = localFont({
+  src: "../../Font/Fontspring-DEMO-theseasons-reg.otf",
+  display: "swap",
+  variable: "--font-the-seasons",
+})
+
+const aboveTheBeyond = localFont({
+  src: "../../Font/above-the-beyond-script.otf",
+  display: "swap",
+  variable: "--font-above-beyond",
+})
+
+const CORNER_DECO_CLASS =
+  "block h-auto w-auto max-w-[120px] sm:max-w-[180px] md:max-w-[260px] lg:max-w-[320px] xl:max-w-[380px]"
+
+const cardStyle = {
+  background: "var(--color-welcome-bg)",
+  borderColor: "color-mix(in srgb, var(--color-motif-deep) 14%, transparent)",
+  borderWidth: "1px",
+  borderStyle: "solid",
+  boxShadow:
+    "0 8px 28px color-mix(in srgb, var(--color-motif-deep) 7%, transparent), inset 0 1px 0 color-mix(in srgb, white 70%, transparent)",
+} as const
+
+const ambientGlowStyle = {
+  background:
+    "linear-gradient(135deg, color-mix(in srgb, var(--color-motif-deep) 18%, transparent) 0%, color-mix(in srgb, var(--color-welcome-green) 12%, transparent) 48%, color-mix(in srgb, var(--color-motif-deep) 10%, transparent) 100%)",
+} as const
+
+const dividerLineStyle = {
+  background:
+    "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-motif-deep) 38%, transparent), transparent)",
+} as const
+
+const palette = {
+  body: "var(--color-welcome-text)",
+  heading: "var(--color-welcome-navy)",
+  label: "var(--color-welcome-heading)",
+  accent: "var(--color-welcome-green)",
+} as const
+
+const nameStyle: React.CSSProperties = {
+  fontSize: "clamp(0.6875rem, 2.55vw, 1.0625rem)",
+  lineHeight: 1.3,
+}
+
+function EntourageCoupleLabel({ groom, bride }: { groom: string; bride: string }) {
+  const lineStyle = {
+    background:
+      "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-welcome-navy) 35%, transparent))",
+  }
+
+  return (
+    <div className="flex items-center justify-center gap-2.5 sm:gap-3.5">
+      <span className="h-px w-5 sm:w-7 md:w-9" style={lineStyle} aria-hidden />
+      <p
+        className={`${cinzel.className} shrink-0 py-0.5 text-[0.525rem] font-semibold uppercase leading-normal tracking-[0.34em] min-[400px]:text-[0.55rem] min-[400px]:tracking-[0.38em] sm:text-[0.575rem] sm:tracking-[0.44em]`}
+        style={{ color: "var(--color-welcome-navy)" }}
+      >
+        With {groom}
+        <span
+          className={`${aboveTheBeyond.className} mx-1.5 inline-block normal-case tracking-normal sm:mx-2`}
+          style={{
+            fontSize: "1.35em",
+            color: "var(--color-welcome-green)",
+            verticalAlign: "middle",
+          }}
+          aria-hidden
+        >
+          &
+        </span>
+        {bride}
+      </p>
+      <span
+        className="h-px w-5 sm:w-7 md:w-9"
+        style={{
+          background:
+            "linear-gradient(to left, transparent, color-mix(in srgb, var(--color-welcome-navy) 35%, transparent))",
+        }}
+        aria-hidden
+      />
+    </div>
+  )
+}
+
+function EntourageTitle() {
+  return (
+    <h2
+      className="relative mx-auto w-full max-w-full text-center"
+      style={
+        {
+          "--title-size": "clamp(1.55rem, 4.1vw + 0.65rem, 4.5rem)",
+          "--script-size": "clamp(1rem, 4vw, 2rem)",
+          "--script-overlap": "clamp(-0.6rem, -2.5vw, -1.35rem)",
+        } as React.CSSProperties
+      }
+    >
+      <span
+        className={`${theSeasons.className} block uppercase leading-[0.78] tracking-[0.08em] min-[400px]:tracking-[0.11em] sm:tracking-[0.15em] md:tracking-[0.18em]`}
+        style={{
+          fontSize: "var(--title-size)",
+          color: "var(--color-welcome-navy)",
+        }}
+      >
+        Wedding Entourage
+      </span>
+      <span
+        aria-hidden
+        className={`${aboveTheBeyond.className} relative z-10 mx-auto block w-fit max-w-full px-1 leading-[0.88] sm:leading-[0.9]`}
+        style={{
+          marginTop: "var(--script-overlap)",
+          fontSize: "var(--script-size)",
+          color: "var(--color-welcome-green)",
+          textShadow:
+            "0 1px 0 color-mix(in srgb, var(--color-welcome-bg) 95%, white), 0 0 10px color-mix(in srgb, var(--color-welcome-bg) 65%, white)",
+        }}
+      >
+        standing with us
+      </span>
+      <span className="sr-only">standing with us</span>
+    </h2>
+  )
+}
 
 interface EntourageMember {
   name: string
@@ -46,51 +165,6 @@ function principalSponsorFromApi(row: Record<string, unknown>): PrincipalSponsor
     malePrincipalSponsor: r.malePrincipalSponsor ?? r.MalePrincipalSponsor ?? "",
     femalePrincipalSponsor: r.femalePrincipalSponsor ?? r.FemalePrincipalSponsor ?? "",
   }
-}
-
-const CORNER_DECO_CLASS =
-  "block h-auto w-auto max-w-[120px] sm:max-w-[160px] md:max-w-[220px] lg:max-w-[260px]"
-
-const BLUE_SHELL_FILTER =
-  `brightness(0) saturate(100%) invert(58%) sepia(18%) saturate(612%) hue-rotate(152deg) brightness(95%) contrast(88%) drop-shadow(0 4px 14px color-mix(in srgb, ${coastalPalette.blueGray} 55%, transparent))`
-
-const glassCardStyle = {
-  backgroundColor: `color-mix(in srgb, ${coastalPalette.cream} 38%, transparent)`,
-  borderColor: "rgba(255, 255, 255, 0.62)",
-  boxShadow: `0 28px 72px color-mix(in srgb, ${coastalPalette.teal} 10%, transparent), 0 12px 32px color-mix(in srgb, ${coastalPalette.blueGray} 16%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.82), inset 0 -1px 0 rgba(255, 255, 255, 0.12)`,
-} as const
-
-const glassAmbientGlowStyle = {
-  background: `linear-gradient(135deg, color-mix(in srgb, ${coastalPalette.blueGray} 32%, transparent) 0%, color-mix(in srgb, ${coastalPalette.dustyRose} 22%, transparent) 48%, color-mix(in srgb, ${coastalPalette.teal} 18%, transparent) 100%)`,
-} as const
-
-const dividerLineStyle = {
-  background: `linear-gradient(to right, transparent, color-mix(in srgb, white 72%, ${coastalPalette.blueGray}), transparent)`,
-} as const
-
-// Coastal palette — aligned with details / gallery sections
-const palette = {
-  body: coastalPalette.body,
-  heading: coastalPalette.deep,
-  label: coastalPalette.dustyRose,
-  accent: coastalPalette.title,
-  deep: coastalPalette.deep,
-  medium: coastalPalette.teal,
-  softBrown: coastalPalette.dustyRose,
-  background: coastalPalette.cream,
-  champagneGold: coastalPalette.blueGray,
-  champagneLight: coastalPalette.lavenderBlue,
-  sage: coastalPalette.teal,
-} as const
-
-const bodyFont: React.CSSProperties = {
-  fontFamily: "'SortsMillGoudy', Georgia, 'Times New Roman', serif",
-}
-
-const nameStyle: React.CSSProperties = {
-  fontFamily: "'SortsMillGoudy', Georgia, serif",
-  fontSize: "clamp(0.6875rem, 2.55vw, 1.0625rem)",
-  lineHeight: 1.3,
 }
 
 const ct = {
@@ -320,7 +394,7 @@ export function Entourage() {
     return (
       <h3
         className={`relative ${cinzel.className} ${ct.sectionTitle} tracking-[0.1em] sm:tracking-[0.14em] md:tracking-[0.16em] uppercase mb-1.5 sm:mb-2 md:mb-2.5 ${textAlign} ${className} transition-all duration-300 whitespace-nowrap font-semibold leading-tight`}
-        style={{ color: palette.accent }}
+        style={{ color: palette.heading }}
       >
         {children}
       </h3>
@@ -351,7 +425,7 @@ export function Entourage() {
           style={{ background: `linear-gradient(to right, transparent, color-mix(in srgb, white 28%, transparent), transparent)` }}
         />
         <p
-          className={`relative font-medium ${textAlign} transition-all duration-300 whitespace-nowrap max-w-full overflow-hidden text-ellipsis`}
+          className={`font-goudy-italic relative font-medium ${textAlign} transition-all duration-300 whitespace-nowrap max-w-full overflow-hidden text-ellipsis`}
           style={{ ...nameStyle, color: palette.heading }}
           title={displayName}
         >
@@ -413,65 +487,71 @@ export function Entourage() {
   }
 
   return (
-    <div className="relative w-full" style={{ backgroundColor: coastalLightBg }}>
+    <div
+      className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative w-full`}
+      style={{ background: "var(--color-welcome-bg)" }}
+    >
       <section
         ref={sectionRef}
         id="entourage"
-        className="relative z-10 pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14 overflow-hidden"
+        className="relative z-10 overflow-hidden pt-8 pb-8 sm:pt-10 sm:pb-10 md:pt-12 md:pb-12 lg:pt-14 lg:pb-14"
       >
-        {/* Shell corner decorations */}
-        <div className="pointer-events-none absolute left-0 top-0 z-[1]">
+        {/* Corner decorations */}
+        <div className="pointer-events-none absolute left-0 top-0 z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/decoration/top-left-shell-deco.png"
+            src="/decoration/decoration/left-top-decoration.png"
             alt=""
             className={CORNER_DECO_CLASS}
-            style={{ filter: BLUE_SHELL_FILTER }}
           />
         </div>
-        <div className="pointer-events-none absolute bottom-0 right-0 z-[1]">
+        <div className="pointer-events-none absolute right-0 top-0 z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/decoration/right-bottom-shell-deco.png"
+            src="/decoration/decoration/right-top-decoration.png"
             alt=""
             className={CORNER_DECO_CLASS}
-            style={{ filter: BLUE_SHELL_FILTER }}
+          />
+        </div>
+        <div className="pointer-events-none absolute bottom-0 left-0 z-10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/decoration/decoration/left-bottom-decoration%20(2).png"
+            alt=""
+            className={CORNER_DECO_CLASS}
+          />
+        </div>
+        <div className="pointer-events-none absolute bottom-0 right-0 z-10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/decoration/decoration/right-bottom-decoration%20(2).png"
+            alt=""
+            className={CORNER_DECO_CLASS}
           />
         </div>
 
       {/* Section Header */}
-      <div className={`relative z-20 text-center mb-6 sm:mb-8 md:mb-10 px-6 sm:px-10 md:px-12 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"}`}>
-        <p
-          className={`${cinzel.className} ${ct.label} uppercase tracking-[0.2em] sm:tracking-[0.24em] mb-2`}
-          style={{ color: coastalPalette.dustyRose }}
-        >
-          With {siteConfig.couple.groomNickname} &amp; {siteConfig.couple.brideNickname}
-        </p>
+      <div className={`relative z-20 mb-6 px-6 text-center sm:mb-8 sm:px-10 md:mb-10 md:px-12 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"}`}>
+        <EntourageCoupleLabel
+          groom={siteConfig.couple.groomNickname || siteConfig.couple.groom}
+          bride={siteConfig.couple.brideNickname || siteConfig.couple.bride}
+        />
 
-        <h2
-          className="mx-auto my-4 whitespace-nowrap text-center sm:my-5 md:my-6 leading-[1.08]"
-          style={{
-            ...displayScript,
-            fontSize: "clamp(1.55rem, 4.1vw + 0.65rem, 4.25rem)",
-            color: coastalPalette.title,
-            letterSpacing: "0.02em",
-            textShadow: coastalTitleShadow,
-          }}
-        >
-          Wedding Entourage
-        </h2>
+        <div className="my-4 sm:my-5 md:my-6">
+          <EntourageTitle />
+        </div>
 
         <p
-          className={`${ct.bodyLg} max-w-xl mx-auto leading-relaxed italic px-2`}
-          style={{ ...bodyFont, color: coastalPalette.body }}
+          className="font-goudy-italic mx-auto max-w-xl px-2 text-[0.75rem] leading-[1.62] sm:text-[0.8125rem] sm:leading-[1.65] md:text-[0.84375rem]"
+          style={{ color: "var(--color-welcome-text)" }}
         >
           Honoring those who stand with us on our special day
         </p>
 
-        <div className="flex items-center justify-center pt-2 sm:pt-3">
+        <div className="flex items-center justify-center pt-3 sm:pt-4">
           <span
             className="h-px w-16 sm:w-24 md:w-32"
-            style={{ backgroundColor: `color-mix(in srgb, ${coastalPalette.blueGray} 70%, white)` }}
+            style={dividerLineStyle}
           />
         </div>
       </div>
@@ -485,12 +565,12 @@ export function Entourage() {
         <div className="relative">
           <div
             className="pointer-events-none absolute -inset-1 rounded-2xl opacity-50 blur-2xl sm:-inset-2"
-            style={glassAmbientGlowStyle}
+            style={ambientGlowStyle}
             aria-hidden
           />
           <div
-            className="relative z-20 rounded-xl sm:rounded-2xl overflow-hidden border backdrop-blur-xl sm:backdrop-blur-2xl transition-all duration-500"
-            style={glassCardStyle}
+            className="relative z-20 overflow-hidden rounded-xl border backdrop-blur-xl transition-all duration-500 sm:rounded-2xl sm:backdrop-blur-2xl"
+            style={cardStyle}
           >
             <div
               className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 via-white/10 to-transparent"
@@ -499,12 +579,13 @@ export function Entourage() {
             <div
               className="pointer-events-none absolute inset-0"
               style={{
-                background: `linear-gradient(to top, color-mix(in srgb, ${coastalPalette.blueGray} 10%, transparent), transparent 45%)`,
+                background:
+                  "linear-gradient(to top, color-mix(in srgb, var(--color-motif-deep) 8%, transparent), transparent 45%)",
               }}
               aria-hidden
             />
             <div
-              className="pointer-events-none absolute inset-0 rounded-xl sm:rounded-2xl ring-1 ring-inset ring-white/35"
+              className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-white/35 sm:rounded-2xl"
               aria-hidden
             />
 
@@ -512,12 +593,16 @@ export function Entourage() {
             <div className="relative p-5 sm:p-6 md:p-8 lg:p-10 z-20">
             {isLoading ? (
               <div className="flex items-center justify-center py-24 sm:py-28 md:py-32">
-                <span className={ct.body} style={{ ...bodyFont, color: palette.body }}>Loading entourage...</span>
+                <span className={`font-goudy-italic ${ct.body}`} style={{ color: palette.body }}>
+                  Loading entourage...
+                </span>
               </div>
             ) : error ? (
               <div className="flex items-center justify-center py-24 sm:py-28 md:py-32">
                 <div className="text-center">
-                  <p className={`${ct.bodyLg} mb-3`} style={{ ...bodyFont, color: palette.body }}>{error}</p>
+                  <p className={`font-goudy-italic ${ct.bodyLg} mb-3`} style={{ color: palette.body }}>
+                    {error}
+                  </p>
                   <button
                     onClick={fetchEntourage}
                     className={`${cinzel.className} ${ct.body} underline transition-colors duration-200 hover:opacity-80`}
@@ -529,7 +614,9 @@ export function Entourage() {
               </div>
             ) : entourage.length === 0 ? (
               <div className="text-center py-24 sm:py-28 md:py-32">
-                <p className={ct.bodyLg} style={{ ...bodyFont, color: palette.body }}>No entourage members yet</p>
+                <p className={`font-goudy-italic ${ct.bodyLg}`} style={{ color: palette.body }}>
+                  No entourage members yet
+                </p>
               </div>
             ) : (
             <>
