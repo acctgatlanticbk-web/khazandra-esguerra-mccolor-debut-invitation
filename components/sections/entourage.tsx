@@ -616,8 +616,16 @@ export function Entourage() {
             <>
               {ROLE_CATEGORY_ORDER.map((category, categoryIndex) => {
                 const members = grouped[category] || []
+                const bridalPartyHasMembers =
+                  (grouped["Groomsmen"]?.length ?? 0) > 0 ||
+                  (grouped["Bridesmaids"]?.length ?? 0) > 0
                 
-                if (members.length === 0) return null
+                if (
+                  members.length === 0 &&
+                  !(category === "Groomsmen" && bridalPartyHasMembers)
+                ) {
+                  return null
+                }
                 if (HIDDEN_ROLE_CATEGORIES.has(category)) return null
                 if (category === "Peer Sponsors") return null
 
