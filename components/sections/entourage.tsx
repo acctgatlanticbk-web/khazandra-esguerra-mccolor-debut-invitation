@@ -222,11 +222,11 @@ const ROLE_CATEGORY_ORDER = [
   "Matron of Honor",
   "Best Man",
   "Maid of Honor",
+  "Groomsmen",
+  "Bridesmaids",
   "Candle Sponsors",
   "Veil Sponsors",
   "Cord Sponsors",
-  "Groomsmen",
-  "Bridesmaids",
   "Little Groom",
   "Little Bride",
   "Ring Bearer",
@@ -1019,8 +1019,8 @@ export function Entourage() {
                   const bridesmaids = grouped["Bridesmaids"] || []
                   const groomsmen = grouped["Groomsmen"] || []
                   
-                  // Only render once (when processing "Bridesmaids")
-                  if (category === "Bridesmaids") {
+                  // Only render once (when processing "Groomsmen")
+                  if (category === "Groomsmen") {
                     return (
                       <React.Fragment key="BridalPartySection">
                         {/* Groomsmen/Bridesmaids section */}
@@ -1055,7 +1055,7 @@ export function Entourage() {
                       </React.Fragment>
                     )
                   }
-                  // Skip rendering for "Groomsmen" since it's already rendered above
+                  // Skip rendering for "Bridesmaids" since it's already rendered above
                   return null
                 }
 
