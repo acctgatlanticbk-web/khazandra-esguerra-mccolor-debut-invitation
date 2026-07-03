@@ -174,7 +174,7 @@ function buildTimelineEvents(siteConfig: SiteConfig): TimelineEvent[] {
     },
     {
       time: "10:00 PM",
-      title: "Endo Program",
+      title: "End of Program",
       location: siteConfig.ceremony.location,
       icon: DanceIcon,
       imageSrc: "/weddingtimeline/SendOff.png",
