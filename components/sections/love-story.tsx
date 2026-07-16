@@ -5,6 +5,7 @@ import Link from "next/link"
 import localFont from "next/font/local"
 import { StorySection } from "@/components/StorySection"
 import { Cinzel } from "next/font/google"
+import { useSiteConfig } from "@/hooks/use-site-config"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -48,7 +49,7 @@ function OrnamentalDivider() {
   )
 }
 
-function LoveStoryTitle() {
+function DebutStoryTitle() {
   return (
     <h1
       className="relative mx-auto w-full max-w-full text-center"
@@ -67,7 +68,7 @@ function LoveStoryTitle() {
           color: "var(--color-welcome-navy)",
         }}
       >
-        Celebration of Love
+        Her Story
       </span>
       <span
         aria-hidden
@@ -80,14 +81,18 @@ function LoveStoryTitle() {
             "0 1px 0 color-mix(in srgb, var(--color-welcome-bg) 95%, white), 0 0 10px color-mix(in srgb, var(--color-welcome-bg) 65%, white)",
         }}
       >
-        Join us as we say 'I do'
+        eighteen chapters in the making
       </span>
-      <span className="sr-only">Join us as we say 'I do'</span>
+      <span className="sr-only">eighteen chapters in the making</span>
     </h1>
   )
 }
 
 export function LoveStory() {
+  const siteConfig = useSiteConfig()
+  const celebrantName = siteConfig.debut.celebrantName
+  const firstName = celebrantName.split(" ")[0]
+
   return (
     <div className={`${theSeasons.variable} ${aboveTheBeyond.variable} relative min-h-screen overflow-x-hidden`}>
       <div
@@ -96,179 +101,137 @@ export function LoveStory() {
       >
         <div className="pointer-events-none absolute right-0 top-0 z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/decoration/right-top-decoration.png"
-            alt=""
-            className={CORNER_DECO_CLASS}
-          />
+          <img src="/decoration/right-top-decoration.png" alt="" className={CORNER_DECO_CLASS} />
         </div>
         <div className="pointer-events-none absolute left-0 top-0 z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/decoration/left-top-decoration.png"
-            alt=""
-            className={CORNER_DECO_CLASS}
-          />
+          <img src="/decoration/left-top-decoration.png" alt="" className={CORNER_DECO_CLASS} />
         </div>
         <div className="relative z-20">
           <div className="mx-auto mb-5 sm:mb-6 md:mb-7">
             <OrnamentalDivider />
           </div>
           <div className="mx-auto mt-2 sm:mt-3 md:mt-4">
-            <LoveStoryTitle />
+            <DebutStoryTitle />
           </div>
         </div>
-{/* 
-        <p
-          className="font-goudy-italic mx-auto mt-4 max-w-xl text-[0.75rem] leading-snug sm:mt-5 sm:text-[0.8125rem] md:mt-6 md:text-[0.84375rem]"
-          style={{ color: "var(--color-welcome-text)" }}
-        >
-          &ldquo;11 Years of Love, Now Forever&rdquo;
-        </p> */}
       </div>
 
       <StorySection
-  theme="light"
-  layout="image-left"
-  isFirst={true}
-  title="You are Invited to Celebrate With Us"
-  imageSrc="/mobile-background/couples (23).webp"
-  text={
-    <>
-      <p className="mb-4">
-      Some moments are meant to be shared with the people who matter most.
-      </p>
-      <p className="mb-4">
-      We're getting married on December 12, 2026, and we would be truly honored to have you there with us.
-      </p>
-    </>
-  }
-/>
+        theme="light"
+        layout="image-left"
+        isFirst={true}
+        title={`A Girl Who Became a Woman`}
+        imageSrc="/mobile-background/debut (1).jpg"
+        text={
+          <>
+            <p className="mb-4">
+              From her very first breath, {firstName} has carried a light that quietly brightens every room she enters. She grew up with curiosity in her eyes and warmth in her heart — always reaching, always learning, always becoming.
+            </p>
+            <p className="mb-4">
+              Eighteen years may sound like the beginning, but for those who have watched her grow, it feels like the bloom of something truly extraordinary.
+            </p>
+          </>
+        }
+      />
 
-<StorySection
-  theme="dark"
-  layout="image-right"
-  imageSrc="/mobile-background/couples (20).webp"
-  title="For Being Here With Us"
-  text={
-    <>
-      <p className="mb-4">
-      Some celebrations are only truly complete with loved ones near.
-      </p>
-      <p className="mb-4">
-      Whether you're traveling far or coming from just around the corner, your presence will make this day all the more meaningful.
-      </p>
-    </>
-  }
-/>
+      <StorySection
+        theme="dark"
+        layout="image-right"
+        imageSrc="/mobile-background/debut (2).jpg"
+        title="The Heart Behind the Name"
+        text={
+          <>
+            <p className="mb-4">
+              {firstName} is someone who loves deeply and gives freely. She is the kind of person who remembers the little things, who shows up for the people she cares about, and who finds beauty in the everyday.
+            </p>
+            <p className="mb-4">
+              Behind the grace and the smile is a young woman of quiet strength — one who faces life with courage and faces people with kindness.
+            </p>
+          </>
+        }
+      />
 
-<StorySection
-  theme="light"
-  layout="image-left"
-  imageSrc="/mobile-background/couples (8).webp"
-  title="For the Love and Support"
-  text={
-    <>
-      <p>
-      We would not be who we are without the people who lifted us along the way.
-      </p>
-      <p className="mb-4">
-      To our families and friends, thank you for your guidance, encouragement, and love that carried us to this moment.
-      </p>
-      <p className="mb-4">
-      Every kind word, every gesture of support, has shaped this day in ways words can hardly capture.
-      </p>
-    </>
-  }
-/>
+      <StorySection
+        theme="light"
+        layout="image-left"
+        imageSrc="/mobile-background/debut (3).jpg"
+        title="Shaped by Love"
+        text={
+          <>
+            <p className="mb-4">
+              {firstName} did not grow up alone. She was shaped by the hands of a family who loved her fiercely, by friends who walked beside her, and by moments — both joyful and hard — that carved her into who she is today.
+            </p>
+            <p className="mb-4">
+              To everyone who poured into her life: your love is woven into every part of this celebration. Tonight is as much yours as it is hers.
+            </p>
+          </>
+        }
+      />
 
-<StorySection
-  theme="dark"
-  layout="image-right"
-  imageSrc="/mobile-background/couples (10).webp"
-  title="Becoming Family"
-  text={
-    <>
-      <p>
-      This day isn't just about the two of us—it's about all of us.
-      </p>
-      <p className="mb-4">
-      To both of our families coming together, thank you for welcoming us with open arms. We're honored to now call each other family.
-      </p>
-    </>
-  }
-/>
+      <StorySection
+        theme="dark"
+        layout="image-right"
+        imageSrc="/mobile-background/debut (4).jpg"
+        title="Chasing Dreams with Grace"
+        text={
+          <>
+            <p className="mb-4">
+              {firstName} has always known what she wants, even when the path was not perfectly clear. She moves through life with intention — dreaming boldly, working quietly, and trusting the journey.
+            </p>
+            <p className="mb-4">
+              Turning eighteen is not just a number. It is a threshold — and {firstName} steps across it with vision, faith, and a heart full of possibility.
+            </p>
+          </>
+        }
+      />
 
-<StorySection
-  theme="light"
-  layout="image-left"
-  isLast={true}
-  imageSrc="/mobile-background/couples (16).webp"
-  title="Mark Your Calendars"
-  text={
-    <>
-      <p>
-      December 12, 2026 will be a day we'll always treasure.
-      </p>
-      <p className="mb-4">
-      We can't wait to celebrate this milestone surrounded by the people we love most—thank you for being one of them.
-      </p>
-    </>
-  }
-/>
-<StorySection
-  theme="dark"
-  layout="image-right"
-  imageSrc="/mobile-background/couples (5).webp"
-  title="With Gratitude, Always"
-  text={
-    <>
-      <p>
-      Words can only say so much, but our gratitude runs deep.
-      </p>
-      <p className="mb-4">
-      Thank you for your love, your blessings, and for being part of our lives on this special day. We carry your presence with us always.
-      </p>
-    </>
-  }
-/>
+      <StorySection
+        theme="light"
+        layout="image-left"
+        imageSrc="/mobile-background/debut (5).jpg"
+        title="Tonight, We Celebrate Her"
+        text={
+          <>
+            <p className="mb-4">
+              December 12, 2026 is a night set apart — a night to look back on eighteen beautiful years and to look forward to everything still to come.
+            </p>
+            <p className="mb-4">
+              We gather not just to mark a birthday, but to honor the young woman {firstName} has grown into — and to send her forward into her next chapter with all the love we have.
+            </p>
+          </>
+        }
+      />
 
-<StorySection
-  theme="light"
-  layout="image-left"
-  isLast={true}
-  imageSrc="/mobile-background/couples (6).webp"
-  title="Thank You for Being Part of Our Family"
-  text={
-    <>
-      <p>
-      Every celebration is made richer by the people who show up for it.
-      </p>
-      <p className="mb-4">
-      Thank you, from the bottom of our hearts, for being here, for your love, and for being part of our family.
-      </p>
-    </>
-  }
-/>
-<div
+      <StorySection
+        theme="dark"
+        layout="image-right"
+        isLast={true}
+        imageSrc="/mobile-background/debut (6).jpg"
+        title="With Gratitude, Always"
+        text={
+          <>
+            <p className="mb-4">
+              To every person in this room — thank you. Thank you for the prayers, the presence, and the love that made {firstName} who she is.
+            </p>
+            <p className="mb-4">
+              She is grateful beyond words, and so are we. From the bottom of our hearts, thank you for being part of her story.
+            </p>
+          </>
+        }
+      />
+
+      <div
         className="relative px-4 pb-16 pt-8 text-center sm:pb-20 sm:pt-10 md:pb-24 md:pt-12"
         style={{ background: "var(--color-welcome-bg)" }}
       >
         <div className="pointer-events-none absolute bottom-0 left-0 z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/decoration/left-bottom-decoration.png"
-            alt=""
-            className={CORNER_DECO_CLASS}
-          />
+          <img src="/decoration/left-bottom-decoration.png" alt="" className={CORNER_DECO_CLASS} />
         </div>
         <div className="pointer-events-none absolute bottom-0 right-0 z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/decoration/right-bottom-decoration.png"
-            alt=""
-            className={CORNER_DECO_CLASS}
-          />
+          <img src="/decoration/right-bottom-decoration.png" alt="" className={CORNER_DECO_CLASS} />
         </div>
         <div className="relative z-20">
           <div className="mx-auto mb-5 sm:mb-6">
@@ -292,7 +255,7 @@ export function LoveStory() {
                 "color-mix(in srgb, var(--color-welcome-navy) 35%, transparent)"
             }}
           >
-            <span className="relative z-10">Join us</span>
+            <span className="relative z-10">Celebrate with her</span>
             <div
               className="absolute inset-0 -z-0 rounded-sm opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-25"
               style={{ backgroundColor: "var(--color-motif-deep)" }}

@@ -134,36 +134,47 @@
 
 @theme inline {
   --font-sans: "Inter", "Inter Fallback";
-  /* Updated serif font to Great Vibes */
   --font-serif: "Great Vibes", "Great Vibes Fallback";
 
-  /* ─── Motif palette — edit here, affects every component ─── */
-  /* Background */
-  --color-motif-cream:   #FFF9F8; /* text couple and the background section */
+  /* ───────── BACKGROUND ───────── */
+  --color-motif-cream:   #F7F3FA;
 
-  /* Primary Highlight */
-  --color-motif-yellow:  #F9E8DC; /* nothing changes see */
+  /* Crystal White */
+  --color-motif-yellow:  #F9F7FC;
 
-  /* Secondary */
-  --color-motif-soft:    #F7DCE2; /* nothing changes see*/
-  --color-motif-accent:  #CDA5AF; /* nothing changes see */
+  /* Soft Lavender */
+  --color-motif-soft:    #E9E0F2;
 
-  /* Primary Brand */
-  --color-motif-deep:    #9F6B78; /* Navbar background. */
-  --color-motif-medium:  #E8CDD2; /* just a line below the navbar border  */
+  /* Dusty Lilac */
+  --color-motif-accent:  #C2ACC9;
+
+  /* Main Brand */
+  --color-motif-deep:    #4A3B63;
+
+  /* Borders */
+  --color-motif-medium:  #8A79A7;
 
   /* Neutral */
-  --color-motif-silver:  #FDFBFA; /* nothing changes see  */
+  --color-motif-silver:  #FCFBFD;
 
-  /* Welcome section */
-  --color-welcome-bg:        color-mix(in srgb, var(--color-motif-cream) 38%, white); /* background color */
-  --color-welcome-bg-soft:   color-mix(in srgb, var(--color-motif-cream) 22%, white); /* background color */
-  --color-welcome-text:      #55494D; /* color to change paragraph text  */
-  --color-welcome-text-soft: #86787C;  /* nothing changes see */
-  --color-welcome-heading:   #9F6B78; /* color to change heading text but the smaller one. */
-  --color-welcome-script:    #B88793; /* nothing changes see */
-  --color-welcome-navy:      #724A56; /* color to change BIG HEADER  */
-  --color-welcome-green:     #D88FA1; /* avatar, button and below header */
+  /* Welcome Section */
+  --color-welcome-bg:        #FBF9FD;
+  --color-welcome-bg-soft:   #F5F2F9;
+
+  --color-welcome-text:      #554B63;
+  --color-welcome-text-soft: #857B94;
+
+  /* Small Heading */
+  --color-welcome-heading:   #6B5A89;
+
+  /* Script Font */
+  --color-welcome-script:    #A28DB8;
+
+  /* BIG TITLE */
+  --color-welcome-navy:      #3C314F;
+
+  /* Buttons / Accent */
+  --color-welcome-green:     #8B8EE5;
   /* ─────────────────────────────────────────────────────────── */
   --font-imperial-script: "Imperial Script", cursive;
   --font-beautiful-malera: "Beautiful Malera", cursive;

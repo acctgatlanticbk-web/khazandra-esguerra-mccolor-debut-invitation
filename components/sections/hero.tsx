@@ -17,7 +17,7 @@ const desktopBackgroundSrcs: readonly string[] = [
 ]
 
 const mobileBackgroundSrcs: readonly string[] = [
-'/mobile-background/couples (10).webp',
+'/mobile-background/debut (2).jpg',
 ]
 
 const SHOW_BUTTERFLIES = false
@@ -169,20 +169,17 @@ export function Hero() {
     }
   }, [imagesLoaded])
 
-  const groomName = siteConfig.couple.groomNickname || siteConfig.couple.groom
-  const brideName = siteConfig.couple.brideNickname || siteConfig.couple.bride
+  const celebrantName = siteConfig.debut.celebrantName
 
   const parsedDate = useMemo(
-    () => parseWeddingDate(siteConfig.ceremony.date ?? siteConfig.wedding.date),
-    [siteConfig.ceremony.date, siteConfig.wedding.date],
+    () => parseWeddingDate(siteConfig.debut.date),
+    [siteConfig.debut.date],
   )
   const weddingMonth = parsedDate.month
   const weddingDayNumber = parsedDate.day
   const weddingYear = parsedDate.year
-  const ceremonyDayShort = (
-    siteConfig.ceremony.day ?? parsedDate.dayOfWeek
-  ).slice(0, 3).toUpperCase()
-  const ceremonyTime = siteConfig.ceremony.time ?? siteConfig.wedding.time
+  const ceremonyDayShort = parsedDate.dayOfWeek.slice(0, 3).toUpperCase()
+  const ceremonyTime = siteConfig.debut.time
 
   return (
     <section
@@ -542,34 +539,33 @@ export function Hero() {
           <div className="w-full space-y-1.5 sm:space-y-2 -mt-1 sm:-mt-2">
             <HeroDivider />
 
-            {/* Tagline */}
+            {/* Debut tagline */}
             <p
-              className="font-goudy-italic text-sm sm:text-base md:text-lg lg:text-xl leading-snug sm:leading-relaxed text-center max-w-lg mx-auto"
+              className={`${cinzel.className} text-[0.6rem] sm:text-xs md:text-sm uppercase tracking-[0.35em] text-center max-w-lg mx-auto font-light`}
               style={{ color: HERO_TEXT_MUTED, textShadow: HERO_TITLE_SHADOW }}
             >
-              Together with our families, we joyfully invite you to witness our union.
+              You are cordially invited to celebrate
             </p>
           </div>
 
-
-          {/* Couple Names — script PNG tinted to motif cream */}
-          <div
-            role="img"
-            aria-label={`${brideName} and ${groomName}`}
-            className="w-full max-w-[min(90vw,22rem)] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl aspect-[528/473] mx-auto drop-shadow-2xl"
-            style={{
-              backgroundColor: "var(--color-motif-cream)",
-              WebkitMaskImage: "url(/decoration/coupleName.png)",
-              maskImage: "url(/decoration/coupleName.png)",
-              WebkitMaskSize: "contain",
-              maskSize: "contain",
-              WebkitMaskRepeat: "no-repeat",
-              maskRepeat: "no-repeat",
-              WebkitMaskPosition: "center",
-              maskPosition: "center",
-              filter: "drop-shadow(0 2px 28px rgba(0,0,0,0.75))",
-            }}
-          />
+          {/* Celebrant Name */}
+          <div className="flex flex-col items-center gap-1">
+            <p
+              className={`${cinzel.className} text-[0.55rem] sm:text-[0.65rem] uppercase tracking-[0.4em] font-light`}
+              style={{ color: HERO_TEXT_MUTED, textShadow: HERO_TITLE_SHADOW }}
+            >
+              the grand debut of
+            </p>
+            <Image
+              src="/Details/DebutName.png"
+              alt={celebrantName}
+              width={900}
+              height={220}
+              className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto object-contain my-3 sm:my-4"
+              style={{ filter: 'brightness(0) invert(1) drop-shadow(0 2px 20px rgba(0,0,0,0.55))' }}
+              priority
+            />
+          </div>
 
           {/* Date & Time block */}
           <div className="w-full max-w-2xl mx-auto">
@@ -641,7 +637,7 @@ export function Hero() {
             className={`${cinzel.className} text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-[0.22em] sm:tracking-[0.26em] md:tracking-[0.3em] text-motif-cream font-medium text-center`}
             style={{ textShadow: "0 2px 18px rgba(0,0,0,0.9)" }}
           >
-            {siteConfig.ceremony.location}
+            {siteConfig.debut.venue}
           </p>
 
           <div className="w-full pt-1 sm:pt-2">
@@ -654,7 +650,7 @@ export function Hero() {
               className="font-goudy-italic text-sm sm:text-base md:text-lg leading-relaxed text-center px-2"
               style={{ color: HERO_TEXT_MUTED, textShadow: HERO_TITLE_SHADOW }}
             >
-              Your presence, prayers, and love will mean the world to us.
+              Your presence and warm wishes will make this milestone truly unforgettable.
             </p>
 
             <div className="w-full flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch">

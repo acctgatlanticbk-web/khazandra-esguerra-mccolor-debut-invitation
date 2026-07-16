@@ -80,7 +80,7 @@ const ct = {
   meta: "text-[10px] sm:text-xs md:text-sm",
 } as const
 
-function GuestsCoupleLabel({ groom, bride }: { groom: string; bride: string }) {
+function GuestsDebutLabel({ name }: { name: string }) {
   const lineStyle = {
     background:
       "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-welcome-navy) 35%, transparent))",
@@ -90,22 +90,10 @@ function GuestsCoupleLabel({ groom, bride }: { groom: string; bride: string }) {
     <div className="flex items-center justify-center gap-2.5 sm:gap-3.5">
       <span className="h-px w-5 sm:w-7 md:w-9" style={lineStyle} aria-hidden />
       <p
-        className={`${cinzel.className} shrink-0 py-0.5 text-[0.525rem] font-semibold uppercase leading-normal tracking-[0.34em] min-[400px]:text-[0.55rem] min-[400px]:tracking-[0.38em] sm:text-[0.575rem] sm:tracking-[0.44em]`}
+        className={`${cinzel.className} shrink-0 py-0.5 text-[0.525rem] font-semibold uppercase leading-normal tracking-[0.28em] min-[400px]:text-[0.55rem] min-[400px]:tracking-[0.32em] sm:text-[0.575rem] sm:tracking-[0.36em]`}
         style={{ color: "var(--color-welcome-navy)" }}
       >
-        Celebrating With {groom}
-        <span
-          className={`${aboveTheBeyond.className} mx-1.5 inline-block normal-case tracking-normal sm:mx-2`}
-          style={{
-            fontSize: "1.35em",
-            color: "var(--color-welcome-green)",
-            verticalAlign: "middle",
-          }}
-          aria-hidden
-        >
-          &
-        </span>
-        {bride}
+        Celebrating With {name}
       </p>
       <span
         className="h-px w-5 sm:w-7 md:w-9"
@@ -151,9 +139,9 @@ function BookOfGuestsTitle() {
             "0 1px 0 color-mix(in srgb, var(--color-welcome-bg) 95%, white), 0 0 10px color-mix(in srgb, var(--color-welcome-bg) 65%, white)",
         }}
       >
-        celebrating with us
+        celebrating with her
       </span>
-      <span className="sr-only">celebrating with us</span>
+      <span className="sr-only">celebrating with her</span>
     </h2>
   )
 }
@@ -179,8 +167,7 @@ const CARDS_PER_VIEW = 4
 
 export function BookOfGuests() {
   const siteConfig = useSiteConfig()
-  const groomName = siteConfig.couple.groomNickname || siteConfig.couple.groom
-  const brideName = siteConfig.couple.brideNickname || siteConfig.couple.bride
+  const firstName = siteConfig.debut.celebrantName.split(" ")[0]
 
   const [totalGuests, setTotalGuests] = useState(0)
   const [rsvpCount, setRsvpCount] = useState(0)
@@ -363,7 +350,7 @@ export function BookOfGuests() {
 
       {/* Section Header */}
       <div className="relative z-20 mb-6 px-6 text-center sm:mb-8 sm:px-10 md:mb-10 md:px-12">
-        <GuestsCoupleLabel groom={groomName} bride={brideName} />
+        <GuestsDebutLabel name={firstName} />
         <div className="my-4 sm:my-5 md:my-6">
           <BookOfGuestsTitle />
         </div>
@@ -371,8 +358,8 @@ export function BookOfGuests() {
           className="font-goudy-italic mx-auto max-w-2xl px-2 text-[0.75rem] leading-[1.62] sm:text-[0.8125rem] sm:leading-[1.65] md:text-[0.84375rem]"
           style={{ color: "var(--color-welcome-text)" }}
         >
-          Meet the cherished souls joining us in celebration — your presence makes our day truly
-          special.
+          Meet the cherished souls joining {firstName} in celebration — your presence makes her day
+          truly special.
         </p>
         <div className="flex items-center justify-center pt-3 sm:pt-4">
           <span className="h-px w-16 sm:w-24 md:w-32" style={dividerLineStyle} />
@@ -421,7 +408,7 @@ export function BookOfGuests() {
                   className={`${cinzel.className} ${ct.label} uppercase tracking-[0.2em] font-semibold mb-3 sm:mb-4`}
                   style={{ color: palette.label }}
                 >
-                  Our Celebration
+                  Her Celebration
                 </p>
 
                 <div className="flex items-center justify-center gap-3 sm:gap-4 mb-1 sm:mb-2">
@@ -436,7 +423,7 @@ export function BookOfGuests() {
                     style={{ color: palette.heading }}
                   >
                     {totalGuests === 1 ? "Guest" : "Guests"}
-                    <span className="block text-[0.85em] font-normal opacity-90">Celebrating With Us</span>
+                    <span className="block text-[0.85em] font-normal opacity-90">Celebrating With Her</span>
                   </p>
                 </div>
 
@@ -458,7 +445,7 @@ export function BookOfGuests() {
                 <div className="mx-auto mb-4 h-px w-12 sm:mb-5 sm:w-16" style={dividerLineStyle} />
 
                 <p className={`font-goudy-italic ${ct.body} mx-auto max-w-md leading-relaxed`} style={{ color: palette.body }}>
-                  Thank you for confirming your RSVP — your presence means the world to us.
+                  Thank you for confirming your RSVP — your presence means the world to {firstName}.
                 </p>
 
                 <p className={`${cinzel.className} ${ct.meta} mt-3 sm:mt-4 uppercase tracking-[0.14em] opacity-70`} style={{ color: palette.body }}>
@@ -477,10 +464,10 @@ export function BookOfGuests() {
                 className={`${cinzel.className} ${ct.label} uppercase tracking-[0.2em] font-semibold`}
                 style={{ color: palette.label }}
               >
-                Joining Us
+                Joining Her
               </p>
               <p className={`font-goudy-italic ${ct.body} mt-1.5`} style={{ color: palette.body }}>
-                A glimpse of the wonderful guests celebrating with us
+                A glimpse of the wonderful guests celebrating with {firstName}
               </p>
             </div>
             <div

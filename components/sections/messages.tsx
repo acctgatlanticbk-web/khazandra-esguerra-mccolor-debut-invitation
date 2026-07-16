@@ -108,7 +108,7 @@ function MessagesTitle() {
           textShadow: OUTSIDE_TITLE_SHADOW,
         }}
       >
-        Love Notes and Prayers
+        Notes and Blessings
       </span>
       <span
         aria-hidden
@@ -120,17 +120,16 @@ function MessagesTitle() {
           textShadow: OUTSIDE_TITLE_SHADOW,
         }}
       >
-        Share your love with us
+        leave a note for her
       </span>
-      <span className="sr-only">Share your love with us</span>
+      <span className="sr-only">leave a note for her</span>
     </h2>
   )
 }
 
 function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
   const siteConfig = useSiteConfig()
-  const { brideNickname, groomNickname } = siteConfig.couple
-  const coupleDisplayName = `${groomNickname} & ${brideNickname}`
+  const firstName = siteConfig.debut.celebrantName.split(" ")[0]
 
   const formRef = useRef<HTMLFormElement>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -238,10 +237,10 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
               className={`${cinzel.className} ${ct.formTitle} mb-1.5 font-semibold`}
               style={{ color: palette.heading }}
             >
-              Share Your Love
+              Share Your Blessings
             </h3>
             <p className={`font-goudy-italic ${ct.body}`} style={{ color: palette.body }}>
-              Leave a note for {coupleDisplayName} to read and keep.
+              Leave a note for {firstName} to read and keep forever.
             </p>
           </div>
 
@@ -304,7 +303,7 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
                 }}
                 onFocus={() => setFocusedField("message")}
                 onBlur={() => setFocusedField(null)}
-                placeholder={`Write your wishes, prayer, or kind words for ${coupleDisplayName}...`}
+                placeholder={`Write your wishes, prayer, or kind words for ${firstName}...`}
                 className={`message-form-textarea ${inputClass("message")} min-h-[90px] resize-none placeholder:leading-relaxed sm:min-h-[110px] md:min-h-[130px]`}
                 style={{
                   color: palette.body,
@@ -356,8 +355,7 @@ function MessageForm({ onSuccess, onMessageSent }: MessageFormProps) {
 
 export function Messages() {
   const siteConfig = useSiteConfig()
-  const { brideNickname, groomNickname } = siteConfig.couple
-  const coupleDisplayName = `${groomNickname} & ${brideNickname}`
+  const firstName = siteConfig.debut.celebrantName.split(" ")[0]
 
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(false)
@@ -407,8 +405,8 @@ export function Messages() {
             className={`font-goudy-italic ${ct.bodyLg} mx-auto mt-4 max-w-2xl leading-relaxed px-2 sm:mt-5 md:mt-6`}
             style={{ color: OUTSIDE_TEXT_MUTED }}
           >
-            Share a short note, wish, or prayer for {coupleDisplayName}. Every message becomes part
-            of their story.
+            Share a short note, wish, or prayer for {firstName}. Every message becomes part of her
+            story.
           </p>
           <div className="flex items-center justify-center pt-3 sm:pt-4">
             <span className="h-px w-16 sm:w-24 md:w-32 bg-white/50" />

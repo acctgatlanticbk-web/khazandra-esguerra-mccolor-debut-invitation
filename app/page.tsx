@@ -4,31 +4,31 @@ import { Suspense, useState, useCallback, useEffect } from "react"
 import dynamic from "next/dynamic"
 import { Hero as MainHero } from "@/components/sections/hero"
 import { Welcome } from "@/components/sections/welcome"
-import { Countdown } from "@/components/sections/countdown"
-import { WeddingTimeline } from "@/components/sections/wedding-timeline"
-import { Gallery } from "@/components/sections/gallery"
-import { Messages } from "@/components/sections/messages"
-import { Details } from "@/components/sections/details"
-import { Accommodation } from "@/components/sections/accommodation"
-import { Entourage } from "@/components/sections/entourage"
-import { PrincipalSponsors } from "@/components/sections/principal-sponsors"
-import { BookOfGuests } from "@/components/sections/book-of-guests"
-import { Registry } from "@/components/sections/registry"
-import { FAQ } from "@/components/sections/faq"
-import { GuestInformation } from "@/components/sections/guest-information"
 import { Footer } from "@/components/sections/footer"
 import { LoveStory } from "@/components/sections/love-story"
-import { WeddingPlaylist } from "@/components/sections/wedding-playlist"
+import { ComingSoon } from "@/components/sections/coming-soon"
 import { Hero as InvitationHero } from "@/components/loader/Hero"
 import { LoadingScreen } from "@/components/loader/LoadingScreen"
 import { Navbar } from "@/components/navbar"
 import { AppState } from "@/components/types"
-import { SnapShare } from "@/components/sections/snap-share"
-import { CoupleVideo } from "@/components/sections/couple-video"
+import { Countdown } from "@/components/sections/countdown"
+import { Gallery } from "@/components/sections/gallery"
 import { VideoMessage } from "@/components/sections/video-message"
+import { Messages } from "@/components/sections/messages"
+import { Details } from "@/components/sections/details"
+import { Accommodation } from "@/components/sections/accommodation"
+import { Entourage } from "@/components/sections/entourage"
+import { GuestInformation } from "@/components/sections/guest-information"
+import { WeddingTimeline } from "@/components/sections/wedding-timeline"
+import { GuestList } from "@/components/sections/guest-list"
+import { BookOfGuests } from "@/components/sections/book-of-guests"
+import { PrincipalSponsors } from "@/components/sections/principal-sponsors"
+import { WeddingPlaylist } from "@/components/sections/wedding-playlist"
+import { FAQ } from "@/components/sections/faq"
+import { Registry } from "@/components/sections/registry"
+import { SnapShare } from "@/components/sections/snap-share"
 
 const Silk = dynamic(() => import("@/components/silk"), { ssr: false })
-const GuestList = dynamic(() => import("@/components/sections/guest-list").then(mod => ({ default: mod.GuestList })), { ssr: false })
 
 export default function Home() {
   // Skip loading/landing only when returning from /gallery.
@@ -79,7 +79,7 @@ export default function Home() {
             {enableDecor && (
               <div className="fixed inset-0 z-0 pointer-events-none">
                 <Suspense fallback={<div className="w-full h-full bg-gradient-to-b from-primary/10 to-secondary/5" />}>
-                  <Silk speed={8} scale={0.9} color="#ff7dc5" noiseIntensity={0} rotation={0.3} />
+                  <Silk speed={8} scale={0.9} color="#7B52D9" noiseIntensity={0} rotation={0.3} />
                 </Suspense>
               </div>
             )}
@@ -93,25 +93,25 @@ export default function Home() {
                {/* <CoupleVideo />  */}
               <LoveStory />
               <Countdown />
-              <Gallery />
-              <VideoMessage />
+              <Gallery /> 
+              {/* <VideoMessage /> */}
               <Messages />
-              <Details />
+              {/* <Details /> */}
+              <GuestList />
+              <ComingSoon />
               {/* <Accommodation /> */}
               {/* <GuestInformation /> */}
-              <WeddingTimeline />
+              {/* <WeddingTimeline />
               <Entourage />
-              <GuestList />
+
               <BookOfGuests />
-      
-              {/* <PrincipalSponsors /> */}
+              <PrincipalSponsors />
               <WeddingPlaylist />
               <FAQ />
-              
               <Registry />
               <SnapShare />
 
-              <Footer />
+              <Footer /> */}
             </div>
           </div>
         </main>

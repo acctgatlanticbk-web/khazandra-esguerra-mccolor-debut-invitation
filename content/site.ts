@@ -9,8 +9,14 @@ export const siteConfig = {
     brideNickname: "Alexandria", //Ltryl
     groom: "John Wendell G. Talagtag", //Ltryl B. Benitez
     groomNickname: "John",
-    monogram:"/monogram/monogram.png" ,//Ltryl
+    monogram:"/monogram/newMonogram.png" ,//Ltryl
     backgroundMusic:"/background_music/Keenan Te - Rest of My Life (Wedding Version).mp3"
+  },
+  debut: {
+    celebrantName: "Khazandra Esguerra Mccolor",
+    date: "December 12, 2026",
+    time: "3:00 PM",
+    venue: "Primus Hotel and Resort",
   },
   googleAPI:{
     messageForm: "https://docs.google.com/forms/d/e/1FAIpQLSdEleuePbXlv-zSfN_-SmkHGTSMTxTNp6CbhH_BuDpeNvRz8g/formResponse",   //done

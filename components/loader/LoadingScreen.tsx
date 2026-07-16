@@ -11,13 +11,13 @@ interface LoadingScreenProps {
 
 // Countdown boxes with color photos - numbers show days, hours, minutes
 const COUNTDOWN_BOXES = [
-  { src: '/gallery-design/boxes (2).jpg' },
-  { src: '/gallery-design/boxes (1).jpg' },
-  { src: '/gallery-design/boxes (3).jpg' }
+  { src: '/gallery-design/box (1).jpg' },
+  { src: '/gallery-design/box (2).jpg' },
+  { src: '/gallery-design/box (3).jpg' }
 ];
 
-const MAIN_BW_IMAGE = '/gallery-design/Phones.jpg';
-const DESKTOP_BW_IMAGE = '/gallery-design/desktops.jpg';
+const MAIN_BW_IMAGE = '/gallery-design/mobile2.jpg';
+const DESKTOP_BW_IMAGE = '/gallery-design/desktop.jpg';
 const STAGGER_DELAY_MS = 4000; // Each image appears every 4 seconds
 const BOX_TRANSITION_MS = 1200; // Slow, smooth transition
 const TOTAL_DURATION_MS = COUNTDOWN_BOXES.length * STAGGER_DELAY_MS + 3000;
@@ -29,10 +29,10 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
   const [visibleBoxes, setVisibleBoxes] = useState<number[]>([]);
   const [now, setNow] = useState(() => new Date());
 
-    // Live countdown: days, hours, minutes until wedding
+  // Live countdown: days, hours, minutes until the debut
   const countdown = useMemo(() => {
-    const weddingDate = new Date(siteConfig.wedding.date);
-    const diff = weddingDate.getTime() - now.getTime();
+    const debutDate = new Date(siteConfig.debut.date);
+    const diff = debutDate.getTime() - now.getTime();
     if (diff <= 0) return { days: 0, hours: 0, minutes: 0 };
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -40,8 +40,8 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
     return { days, hours, minutes };
   }, [now]);
 
-  // Wedding date derived from siteConfig.wedding.date
-  const debutDateObj = new Date(siteConfig.wedding.date);
+  // Debut date derived from siteConfig.debut.date
+  const debutDateObj = new Date(siteConfig.debut.date);
   const debutMonthName = debutDateObj
     .toLocaleString('default', { month: 'short' })
     .toUpperCase(); // e.g. "MAY"
@@ -49,12 +49,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
   const debutYear = String(debutDateObj.getFullYear()); // e.g. "2026"
 
   const countdownNumbers = [debutMonthName, debutDay, debutYear]; // e.g. May, 09, 2026
-  const countdownLabels = ['Month', 'Day', 'Year']; // should return Month, Day, Year
-
-  useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 60000); // update every minute
-    return () => clearInterval(t);
-  }, []);
+  const countdownLabels = ['Month', 'Day', 'Year'];
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 60000); // update every minute
@@ -91,17 +86,9 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
     };
   }, [onComplete]);
 
-  const coupleNames = `${siteConfig.couple.groomNickname} & ${siteConfig.couple.brideNickname}`;
+  const celebrantName = siteConfig.debut.celebrantName;
   const productionCredit = '';
 
-
-//   Background	#F5EFE6
-// --color-motif-deep:    #9C5A63; /* deeper rose */
-// --color-motif-medium:  #D88C9A; /* muted pink */
-// --color-motif-accent:  #F2B5B5; /* pastel pink */
-// --color-motif-cream:   #FFF8F5; /* creamy white */
-// --color-motif-soft:    #F9E4E4; /* soft background */
-// --color-motif-silver:  #CFC7C7; /* refined gray */
   const palette = {
     deep: '--color-motif-deep',
     medium: '--color-motif-medium',
@@ -119,7 +106,6 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
     >
       {/* Background image with overlay */}
       <div className="absolute inset-0">
-        {/* Mobile background */}
         <Image
           src={MAIN_BW_IMAGE}
           alt=""
@@ -128,7 +114,6 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
           sizes="100vw"
           priority
         />
-        {/* Desktop background (md and above) */}
         <Image
           src={DESKTOP_BW_IMAGE}
           alt=""
@@ -137,7 +122,6 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
           sizes="100vw"
           priority
         />
-        {/* Gradient overlay — darkens top & bottom so text is legible */}
         <div
           className="absolute inset-0"
           style={{
@@ -155,20 +139,22 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
       </div>
 
       <div className="relative flex flex-col flex-1 min-h-0">
-        {/* Top: headline + hashtag + countdown (readable over photo, no container) */}
+        {/* Top: headline + countdown */}
         <div className="flex flex-col items-center justify-center w-full pt-12 sm:pt-16 md:pt-24 px-4 sm:px-6 flex-shrink-0">
           <div className="w-full max-w-lg mx-auto">
             <div className="flex flex-col items-center mb-4 sm:mb-5">
               <span
                 style={{
-                  fontFamily: 'var(--font-brittany)',
+                  fontFamily: 'var(--font-the-seasons)',
                   color: 'var(--color-motif-cream)',
-                  fontSize: 'clamp(2.8rem, 10vw, 5.5rem)',
+                  fontSize: 'clamp(2.4rem, 9vw, 5rem)',
                   lineHeight: 1.1,
+                  letterSpacing: '0.06em',
+                  fontWeight: 400,
                   textShadow: '0 2px 18px rgba(0,0,0,0.55), 0 0 32px var(--color-motif-accent)',
                 }}
               >
-                Save the Date
+                A Grand Debut
               </span>
               <span
                 className="text-center whitespace-nowrap mt-3"
@@ -186,14 +172,13 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                 {countdown.days} more days to go
               </span>
             </div>
-
           </div>
         </div>
 
-        {/* Spacer - lets B&W image dominate (upper 2/3) */}
+        {/* Spacer */}
         <div className="flex-1 min-h-[12vh]" />
 
-        {/* Middle: Three color countdown boxes - staggered reveal */}
+        {/* Middle: Three color countdown boxes */}
         <div className="flex items-stretch justify-center gap-3 sm:gap-4 md:gap-6 px-3 sm:px-4 py-4 flex-shrink-0">
           {COUNTDOWN_BOXES.map((item, i) => {
             const isVisible = visibleBoxes.includes(i);
@@ -211,20 +196,17 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
               >
                 <Image
                   src={item.src}
-                  alt={coupleNames}
+                  alt={celebrantName}
                   fill
                   className="object-cover scale-105"
                   sizes="(max-width: 640px) 28vw, 160px"
                 />
-                {/* Soft gradient overlay for readable number */}
                 <div
                   className="absolute inset-0"
                   style={{
                     background: `linear-gradient(145deg, ${palette.deep}66 0%, transparent 40%, ${palette.accent}aa 100%)`,
                   }}
                 />
-
-                {/* Bold debut date number + label - centered at bottom */}
                 <div className="absolute bottom-2 inset-x-0 sm:bottom-3 flex flex-col items-center">
                   <span
                     className="text-3xl sm:text-2xl md:text-4xl lg:text-7xl font-black select-none leading-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] text-center"
@@ -244,20 +226,21 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
           })}
         </div>
 
-        {/* Bottom: Names + production credit + progress bar */}
+        {/* Bottom: Name + credit + progress bar */}
         <div className="flex flex-col items-center w-full pt-3 pb-6 sm:pb-8 px-6 flex-shrink-0 gap-1">
           <p
-            className="text-[10px] sm:text-xs tracking-[0.3em] uppercase"
+            className="text-xs sm:text-sm tracking-[0.25em] uppercase"
             style={{
               fontFamily: '"Cinzel", serif',
               color: 'var(--color-motif-cream)',
-              opacity: 0.7,
+              opacity: 1,
+              textShadow: '0 1px 8px rgba(0,0,0,0.6)',
             }}
           >
-            Almost ready for
+            Celebrating the 18th birthday of
           </p>
           <div
-            className="text-4xl sm:text-5xl md:text-6xl"
+            className="text-3xl sm:text-4xl md:text-5xl"
             style={{
               fontFamily: 'var(--font-playlist-script)',
               color: 'var(--color-motif-cream)',
@@ -265,14 +248,23 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
               fontWeight: 400,
             }}
           >
-            {coupleNames}
+            {celebrantName}
           </div>
+          <p
+            className="text-xs sm:text-sm tracking-[0.3em] uppercase"
+            style={{
+              fontFamily: '"Cinzel", serif',
+              color: 'var(--color-motif-cream)',
+              opacity: 1,
+              textShadow: '0 1px 8px rgba(0,0,0,0.6)',
+            }}
+          >
+            Turning Eighteen
+          </p>
           {productionCredit && (
             <p
               className="text-[10px] font-sans tracking-wider"
-              style={{ color: 'var(--color-motif-cream)', 
-                // opacity: 0.7 
-              }}
+              style={{ color: 'var(--color-motif-cream)' }}
             >
               {productionCredit}
             </p>
@@ -290,7 +282,6 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
             style={{
               fontFamily: '"Cinzel", serif',
               color: 'var(--color-motif-cream)',
-              // opacity: 0.65,
             }}
           >
             Crafting your invitation experience

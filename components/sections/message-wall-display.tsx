@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useState, useEffect } from "react"
 import { Cinzel } from "next/font/google"
+import { useSiteConfig } from "@/hooks/use-site-config"
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -52,6 +53,8 @@ interface MessageWallDisplayProps {
 }
 
 export default function MessageWallDisplay({ messages, loading }: MessageWallDisplayProps) {
+  const siteConfig = useSiteConfig()
+  const firstName = siteConfig.debut.celebrantName.split(" ")[0]
   const [visibleMessages, setVisibleMessages] = useState<Message[]>([])
   const [isAnimating, setIsAnimating] = useState(false)
 
@@ -103,7 +106,7 @@ export default function MessageWallDisplay({ messages, loading }: MessageWallDis
           className={`font-goudy-italic ${ct.emptyBody} mx-auto mb-5 max-w-md leading-relaxed sm:mb-6`}
           style={{ color: OUTSIDE_TEXT_MUTED }}
         >
-          Be the first to leave a note for the happy couple.
+          Be the first to leave a note for {firstName}.
         </p>
         <div className="flex justify-center">
           <span

@@ -27,7 +27,7 @@ const CORNER_DECO_CLASS =
 
 export const dynamic = "force-static"
 
-function GalleryCoupleLabel({ groom, bride }: { groom: string; bride: string }) {
+function GalleryDebutLabel({ name }: { name: string }) {
   const lineStyle = {
     background:
       "linear-gradient(to right, transparent, color-mix(in srgb, var(--color-welcome-navy) 35%, transparent))",
@@ -37,22 +37,10 @@ function GalleryCoupleLabel({ groom, bride }: { groom: string; bride: string }) 
     <div className="flex items-center justify-center gap-2.5 sm:gap-3.5">
       <span className="h-px w-5 sm:w-7 md:w-9" style={lineStyle} aria-hidden />
       <p
-        className={`${cinzel.className} shrink-0 py-0.5 text-[0.525rem] font-semibold uppercase leading-normal tracking-[0.34em] min-[400px]:text-[0.55rem] min-[400px]:tracking-[0.38em] sm:text-[0.575rem] sm:tracking-[0.44em]`}
+        className={`${cinzel.className} shrink-0 py-0.5 text-[0.525rem] font-semibold uppercase leading-normal tracking-[0.28em] min-[400px]:text-[0.55rem] min-[400px]:tracking-[0.32em] sm:text-[0.575rem] sm:tracking-[0.36em]`}
         style={{ color: "var(--color-welcome-navy)" }}
       >
-        With {groom}
-        <span
-          className={`${aboveTheBeyond.className} mx-1.5 inline-block normal-case tracking-normal sm:mx-2`}
-          style={{
-            fontSize: "1.35em",
-            color: "var(--color-welcome-green)",
-            verticalAlign: "middle",
-          }}
-          aria-hidden
-        >
-          &
-        </span>
-        {bride}
+        Celebrating {name}
       </p>
       <span
         className="h-px w-5 sm:w-7 md:w-9"
@@ -98,15 +86,16 @@ function GalleryTitle() {
             "0 1px 0 color-mix(in srgb, var(--color-welcome-bg) 95%, white), 0 0 10px color-mix(in srgb, var(--color-welcome-bg) 65%, white)",
         }}
       >
-        our favorite moments
+        her cherished moments
       </span>
-      <span className="sr-only">our favorite moments</span>
+      <span className="sr-only">her cherished moments</span>
     </h1>
   )
 }
 
 export default async function GalleryPage() {
   const siteConfig = await getSiteConfig()
+  const firstName = siteConfig.debut.celebrantName.split(" ")[0]
   const allImages = await fetchGalleryImages()
   const images = allImages.map((src) => ({
     src,
@@ -160,10 +149,7 @@ export default async function GalleryPage() {
 
       <section className="relative z-20 mx-auto max-w-7xl px-3 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
         <div className="mb-6 px-3 text-center sm:mb-8 sm:px-4 md:mb-10">
-          <GalleryCoupleLabel
-            groom={siteConfig.couple.groomNickname}
-            bride={siteConfig.couple.brideNickname}
-          />
+          <GalleryDebutLabel name={firstName} />
           <div className="my-4 sm:my-5 md:my-6">
             <GalleryTitle />
           </div>
@@ -171,8 +157,8 @@ export default async function GalleryPage() {
             className="font-goudy-italic mx-auto max-w-2xl px-2 text-[0.75rem] leading-[1.62] sm:text-[0.8125rem] sm:leading-[1.65] md:text-[0.84375rem]"
             style={{ color: "var(--color-welcome-text)" }}
           >
-            From our first chapter to this beautiful season of commitment — every moment has been a
-            testament to love, faith, and grace.
+            Eighteen years of light, laughter, and becoming — every frame a glimpse of {firstName}&apos;s
+            story, captured with love.
           </p>
 
           <div className="flex items-center justify-center gap-2 pt-3 sm:pt-4">

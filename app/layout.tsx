@@ -7,10 +7,10 @@ import "./globals.css"
 import { siteConfig } from "@/content/site"
 import { ClientLayout } from "@/components/client-layout"
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://john-wendell-and-alexandria.weddinginvitationrsvp.com/"
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://khazandra-esguerra-mccolor-debut-invitation.weddinginvitationrsvp.com/"
 const canonicalUrl = siteUrl.replace(/\/$/, "")
-  const desktopHero = "/Details/LinkPreview.png"
-const mobileHero = "/Details/LinkPreview.png"
+  const desktopHero = "/Details/newLinkPreview.png"
+const mobileHero = "/Details/newLinkPreview.png"
 const eventImageUrl = `${canonicalUrl}${desktopHero}`
 
 // Hardcoded Cloudinary URL — image is already uploaded and always accessible via CDN.
@@ -23,12 +23,12 @@ const OG_IMAGE_FALLBACK = `${canonicalUrl}${desktopHero}`
 
 const coupleNames = `${siteConfig.couple.groomNickname} & ${siteConfig.couple.brideNickname}`
 const eventTitle = `${coupleNames} - Wedding Invitation`
-const eventDescription = `Celebrate the wedding of ${siteConfig.couple.groomNickname} and ${siteConfig.couple.brideNickname} on ${siteConfig.wedding.date} at ${siteConfig.ceremony.venue}. RSVP, explore their story, and find everything you need to join the celebration.`
+const eventDescription = `Celebrate the debut of ${siteConfig.debut.celebrantName} on ${siteConfig.debut.date} at ${siteConfig.debut.venue}. RSVP, explore her story, and find everything you need to join the celebration.`
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Event",
-  name: `${siteConfig.couple.groomNickname} & ${siteConfig.couple.brideNickname} Wedding`,
+  name: `${siteConfig.debut.celebrantName} Debut`,
   startDate: "2026-04-18T14:00:00+08:00",
   endDate: "2026-04-18T22:00:00+08:00",
   eventStatus: "https://schema.org/EventScheduled",
@@ -59,12 +59,12 @@ const jsonLd = {
   ],
   image: [OG_IMAGE_FALLBACK],
   description:
-    `You're invited to celebrate the wedding of ${siteConfig.couple.groomNickname} & ${siteConfig.couple.brideNickname}. Discover ceremony and reception details, RSVP, and explore their story.`,
+    `You're invited to celebrate the debut of ${siteConfig.debut.celebrantName}. Discover details, RSVP, and explore her story.`,
   organizer: {
     "@type": "Person",
     name: coupleNames,
   },
-  eventHashtag: `#${siteConfig.couple.groomNickname}And${siteConfig.couple.brideNickname}SayIDo`,
+  eventHashtag: `#${siteConfig.debut.celebrantName}Debut`,
 }
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
@@ -91,8 +91,8 @@ export const metadata: Metadata = {
   },
   description: eventDescription,
   keywords:
-    `${siteConfig.couple.groomNickname} ${siteConfig.couple.brideNickname} wedding, ${siteConfig.ceremony.venue} wedding, ${siteConfig.reception.venue} wedding, wedding invitation, RSVP, wedding gallery, message wall, love story, #${siteConfig.couple.groomNickname}And${siteConfig.couple.brideNickname}SayIDo`,
-  applicationName: `${coupleNames} Wedding Invitation`,
+    `${siteConfig.debut.celebrantName} debut, ${siteConfig.debut.venue} debut, debut invitation, RSVP, debut gallery, message wall, love story, #${siteConfig.debut.celebrantName}Debut`,
+  applicationName: `${siteConfig.debut.celebrantName} Debut`,
   authors: [
     { name: siteConfig.couple.groomNickname },
     { name: siteConfig.couple.brideNickname },
@@ -124,7 +124,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `${coupleNames} | ${siteConfig.wedding.date}`,
     description:
-      `Celebrate the union of ${siteConfig.couple.groomNickname} & ${siteConfig.couple.brideNickname} on ${siteConfig.wedding.date}. Discover their story, RSVP, and find important details for the ceremony and reception.`,
+      `Celebrate the debut of ${siteConfig.debut.celebrantName} on ${siteConfig.debut.date}. Discover her story, RSVP, and find important details for the debut.`,
     url: canonicalUrl,
     siteName: `${coupleNames} Wedding`,
     locale: "en_PH",
@@ -150,9 +150,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${coupleNames} Wedding Invitation`,
+    title: `${coupleNames} Debut Invitation`,
     description:
-      `You're invited to the wedding of ${siteConfig.couple.groomNickname} & ${siteConfig.couple.brideNickname} on ${siteConfig.wedding.date}. RSVP, explore their story, and get all the details for the big day! #${siteConfig.couple.groomNickname}And${siteConfig.couple.brideNickname}SayIDo`,
+      `You're invited to the debut of ${siteConfig.debut.celebrantName} on ${siteConfig.debut.date}. RSVP, explore her story, and get all the details for the debut! #${siteConfig.debut.celebrantName}Debut`,
     images: [OG_IMAGE_FALLBACK, eventImageUrl ],
     creator: `@${siteConfig.couple.groomNickname}And${siteConfig.couple.brideNickname}`,
     site: `@${siteConfig.couple.groomNickname}And${siteConfig.couple.brideNickname}`,
